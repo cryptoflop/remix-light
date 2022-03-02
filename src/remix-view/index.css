@@ -1,0 +1,7 @@
+@tailwind base;
+/* @tailwind components; */
+@tailwind utilities;
+
+.focus-outline:focus {
+  outline-color: var(--vscode-focusBorder) !important;
+}

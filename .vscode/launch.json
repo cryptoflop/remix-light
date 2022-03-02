@@ -5,16 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-node",
+      "name": "Run Extension",
+      "type": "extensionHost",
       "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": [
-        "<node_internals>/**"
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "${workspaceFolder}/testWorkspace"
       ],
-      "program": "${workspaceFolder}\\dist\\index.js",
       "outFiles": [
-        "${workspaceFolder}/**/*.js"
-      ]
+        "${workspaceFolder}/dist/**/*.js"
+      ],
+      // "preLaunchTask": "npm: tsc-build"
     }
   ]
 }

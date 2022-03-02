@@ -1,23 +1,72 @@
 {
-  "name": "remix",
-  "version": "1.0.0",
+  "name": "remix-light",
+  "displayName": "remix-light",
+  "version": "0.1.0",
   "description": "",
+  "main": "./dist/extension.js",
+  "engines": {
+    "vscode": "^1.34.0"
+  },
+  "categories": [
+    "Debuggers",
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:remix-light-view"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "remix-light",
+          "title": "remix-light",
+          "icon": "src/assets/logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "remix-light": [
+        {
+          "type": "webview",
+          "id": "remix-light-view",
+          "name": "Panel"
+        }
+      ]
+    }
+  },
   "scripts": {
-    "watch": "npx tsc ./src/index.ts --outDir ./dist/ --skipLibCheck --watch --inlineSourceMap",
-    "start": "node ./dist/index.js"
+    "watch": "npx tsc ./src/extension.ts --outDir ./dist/ --skipLibCheck --watch --inlineSourceMap",
+    "tsc-build": "npx tsc ./src/extension.ts --outDir ./dist/ --skipLibCheck",
+    "start": "node ./dist/index.js",
+    "vscode:prepublish": "npm run tsc-build",
+    "react-bundle": "esbuild ./src/remix-view/index.tsx --bundle --loader:.png=file --outdir=./dist/remix-view --sourcemap=inline --watch",
+    "css": "tailwindcss -i ./src/remix-view/index.css -o ./dist/remix-view/index.css --watch",
+    "dev": "concurrently 'npm:watch' 'npm:css' 'npm:react-bundle'"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@remix-project/remix-simulator": "^0.2.10",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.12",
     "ethereumjs-util": "^7.1.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "save-dev": "0.0.1-security",
+    "solc": "^0.8.12",
     "web3": "^1.7.0"
   },
   "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@types/vscode": "^1.64.0",
     "@types/web3": "^1.2.2",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
+    "concurrently": "^7.0.0",
+    "esbuild": "^0.14.23",
     "eslint": "^8.9.0",
+    "postcss": "^8.4.7",
+    "tailwindcss": "^3.0.23",
     "tslib": "^2.3.1",
     "typescript": "^4.5.5"
   }
