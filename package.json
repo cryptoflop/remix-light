@@ -12,7 +12,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:remix-light-view"
+    "*"
   ],
   "contributes": {
     "viewsContainers": {
@@ -32,7 +32,23 @@
           "name": "Panel"
         }
       ]
-    }
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "remix-light.reload",
+          "when": "remix-light.debug == true",
+          "group": "navigation"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "remix-light.reload",
+        "title": "Reload",
+        "icon": "$(refresh)"
+      }
+    ]
   },
   "scripts": {
     "watch": "npx tsc ./src/extension.ts --outDir ./dist/ --skipLibCheck --watch --inlineSourceMap",
@@ -53,6 +69,7 @@
     "ethereumjs-util": "^7.1.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "rxjs": "^7.5.4",
     "save-dev": "0.0.1-security",
     "solc": "^0.8.12",
     "web3": "^1.7.0"

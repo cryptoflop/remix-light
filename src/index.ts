@@ -8,8 +8,7 @@ const solc = require('solc');
 
   // const [acc1] = await web3.eth.getAccounts();
 
-
-  function findImports(path) {
+  function findImports(path: string) {
     if (path === 'lib.sol')
       return {
         contents:

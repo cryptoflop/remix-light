@@ -18,6 +18,8 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "no-self-assign": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "comma-dangle": [
       "warn",
       "never"

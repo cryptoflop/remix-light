@@ -26,7 +26,9 @@ module.exports = {
         'vscode-button-secondaryBackground': 'var(--vscode-button-secondaryBackground)',
         'vscode-button-secondaryHoverBackground': 'var(--vscode-button-secondaryHoverBackground)',
         'vscode-editor-background': 'var(--vscode-editor-background)',
-        'vscode-editorWidget-border': 'var(--vscode-editorWidget-border)'
+        'vscode-editorWidget-border': 'var(--vscode-editorWidget-border)',
+        'vscode-editorError-foreground': 'var(--vscode-editorError-foreground)',
+        'vscode-editorWarning-foreground': 'var(--vscode-editorWarning-foreground)'
       }
     }
   },

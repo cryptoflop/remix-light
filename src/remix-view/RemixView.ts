@@ -2,9 +2,14 @@ import * as vscode from 'vscode';
 
 export default class RemixViewProvider implements vscode.WebviewViewProvider {
 
-  private _view?: vscode.WebviewView;
+  private view?: vscode.WebviewView;
 
-  constructor(private readonly _extensionUri: vscode.Uri) { }
+  private nounce = Date.now();
+
+  constructor(
+    private readonly _extensionUri: vscode.Uri,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private readonly webViewApi: Record<string, (data: any) => void>) { }
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -13,10 +18,9 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _token: vscode.CancellationToken
   ) {
-    this._view = webviewView;
+    this.view = webviewView;
 
     webviewView.webview.options = {
-      // Allow scripts in the webview
       enableScripts: true,
 
       localResourceRoots: [
@@ -24,35 +28,30 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
       ]
     };
 
-    if (!webviewView.webview.html) {
-      webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-    }
+    this.reload();
 
-    webviewView.webview.onDidReceiveMessage(data => {
-      switch (data.event) {
-      case 'reload':
-      {
-        webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-        break;
-      }
+    webviewView.webview.onDidReceiveMessage((msg: { event: string, data: unknown }) => {
+      if (msg.event === 'reload') {
+        this.reload();
+      } else {
+        this.webViewApi[msg.event](msg.data);
       }
     });
   }
 
-  public addColor() {
-    if (this._view) {
-      this._view.show?.(true); // `show` is not implemented in 1.49 but is for 1.50 insiders
-      this._view.webview.postMessage({ type: 'addColor' });
+  public send(msg: { event: string, data: unknown }) {
+    this.view?.webview.postMessage(msg);
+  }
+
+  public reload() {
+    if (this.view) {
+      this.nounce = Date.now();
+      this.view.webview.html = this.getHtml();
     }
   }
 
-  public clearColors() {
-    if (this._view) {
-      this._view.webview.postMessage({ type: 'clearColors' });
-    }
-  }
-
-  private _getHtmlForWebview(webview: vscode.Webview) {
+  private getHtml(): string {
+    const webview = this.view!.webview;
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'remix-view', 'index.js'));
 
@@ -63,22 +62,20 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
       vscode.Uri.joinPath(this._extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css')
     );
 
-    // use date now to reload
-    const time = Date.now();
     return `<!DOCTYPE html>
       <html lang="en">
-      <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${time}</title>
-          <link href="${codiconsUri}" rel="stylesheet" />
-          <link href="${styleResetUri}" rel="stylesheet">
-      </head>
-      <body>
-          <div id="root"></div>
-          <script src="${scriptUri}"></script>
-      </body>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${this.nounce}</title>
+            <link href="${codiconsUri}" rel="stylesheet" />
+            <link href="${styleResetUri}" rel="stylesheet">
+        </head>
+        <body>
+            <div id="root"></div>
+            <script src="${scriptUri}"></script>
+        </body>
       </html>
-      `;
+    `;
   }
 }
