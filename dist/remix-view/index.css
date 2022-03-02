@@ -470,26 +470,153 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 /* @tailwind components; */
 
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.left-\[-1px\] {
+  left: -1px;
+}
+
+.right-\[-1px\] {
+  right: -1px;
+}
+
+.top-6 {
+  top: 1.5rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mr-0\.5 {
+  margin-right: 0.125rem;
+}
+
+.mt-0\.5 {
+  margin-top: 0.125rem;
+}
+
+.mr-0 {
+  margin-right: 0px;
+}
+
+.mt-0 {
+  margin-top: 0px;
+}
+
+.mb-0\.5 {
+  margin-bottom: 0.125rem;
+}
+
+.mb-0 {
+  margin-bottom: 0px;
+}
+
 .flex {
   display: flex;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.max-h-40 {
+  max-height: 10rem;
 }
 
 .w-full {
   width: 100%;
 }
 
+.w-4 {
+  width: 1rem;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.select-none {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
 .flex-col {
   flex-direction: column;
 }
 
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+.items-center {
+  align-items: center;
+}
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
-  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
+.rounded-\[3px\] {
+  border-radius: 3px;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-b {
+  border-bottom-width: 1px;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
+.border-vscode-editorWidget-border {
+  border-color: var(--vscode-editorWidget-border);
+}
+
+.border-vscode-checkbox-border {
+  border-color: var(--vscode-checkbox-border);
+}
+
+.border-vscode-focusBorder {
+  border-color: var(--vscode-focusBorder);
+}
+
+.border-vscode-dropdown-border {
+  border-color: var(--vscode-dropdown-border);
+}
+
+.border-transparent {
+  border-color: transparent;
+}
+
+.bg-vscode-button-background {
+  background-color: var(--vscode-button-background);
 }
 
 .bg-vscode-button-secondaryBackground {
   background-color: var(--vscode-button-secondaryBackground);
+}
+
+.bg-vscode-checkbox-background {
+  background-color: var(--vscode-checkbox-background);
+}
+
+.bg-vscode-dropdown-background {
+  background-color: var(--vscode-dropdown-background);
 }
 
 .bg-vscode-input-background {
@@ -498,6 +625,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .bg-transparent {
   background-color: transparent;
+}
+
+.p-\[1px\] {
+  padding: 1px;
 }
 
 .px-2 {
@@ -510,18 +641,49 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-bottom: 0.25rem;
 }
 
-.px-\[5px\] {
-  padding-left: 5px;
-  padding-right: 5px;
+.py-0\.5 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
 }
 
-.py-\[3px\] {
-  padding-top: 3px;
-  padding-bottom: 3px;
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.py-0 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.px-1\.5 {
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-vscode-button-foreground {
+  color: var(--vscode-button-foreground);
 }
 
 .text-vscode-button-secondaryForeground {
   color: var(--vscode-button-secondaryForeground);
+}
+
+.text-vscode-checkbox-foreground {
+  color: var(--vscode-checkbox-foreground);
+}
+
+.text-vscode-dropdown-foreground {
+  color: var(--vscode-dropdown-foreground);
+}
+
+.text-vscode-input-placeholderForeground {
+  color: var(--vscode-input-placeholderForeground);
 }
 
 .text-vscode-input-foreground {
@@ -537,6 +699,22 @@ Ensure the default browser behavior of the `hidden` attribute.
   outline-color: var(--vscode-focusBorder) !important;
 }
 
+.focus-within\:border-vscode-focusBorder:focus-within {
+  border-color: var(--vscode-focusBorder);
+}
+
+.hover\:border-vscode-focusBorder:hover {
+  border-color: var(--vscode-focusBorder);
+}
+
+.hover\:bg-vscode-button-hoverBackground:hover {
+  background-color: var(--vscode-button-hoverBackground);
+}
+
 .hover\:bg-vscode-button-secondaryHoverBackground:hover {
   background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.hover\:bg-vscode-editor-background:hover {
+  background-color: var(--vscode-editor-background);
 }

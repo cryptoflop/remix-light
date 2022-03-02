@@ -24,7 +24,9 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
       ]
     };
 
-    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+    if (!webviewView.webview.html) {
+      webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+    }
 
     webviewView.webview.onDidReceiveMessage(data => {
       switch (data.event) {
@@ -57,7 +59,11 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
     const styleResetUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'dist', 'remix-view', 'index.css')
     );
+    const codiconsUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css')
+    );
 
+    // use date now to reload
     const time = Date.now();
     return `<!DOCTYPE html>
       <html lang="en">
@@ -65,6 +71,7 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>${time}</title>
+          <link href="${codiconsUri}" rel="stylesheet" />
           <link href="${styleResetUri}" rel="stylesheet">
       </head>
       <body>

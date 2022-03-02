@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Icon from './Icon';
 
-export default function Dropdown(props: { className?: string, items: string[] }) {
+export default function Input(props: {
+  items: string[], className?: string, selected?: string, onSelected: (item: string) => void
+}) {
+  const [open, setOpen] = useState(false);
+
   return <div className={(props.className || '') +
-  ' bg-vscode-input-background text-vscode-input-foreground'
-  } onClick={() => 1}>
-    <input className='bg-transparent w-full outline-none px-[5px] py-[3px] focus-outline' />
+  ` bg-vscode-dropdown-background text-vscode-dropdown-foreground border
+    flex select-none cursor-pointer py-0.5 px-1 relative ` +
+    (open ? 'border-vscode-focusBorder' : 'border-vscode-dropdown-border')
+  } onClick={() => setOpen(!open)}>
+    { props.selected ?
+      <span className='flex-grow'>{props.selected}</span>
+      :
+      <span className='flex-grow text-vscode-input-placeholderForeground'>Select item</span>
+    }
+    <Icon name='chevron-down' className='mr-0.5 mt-0.5' />
+    { open &&
+      <div className='absolute bg-vscode-dropdown-background left-[-1px] right-[-1px] top-6
+                      border border-vscode-focusBorder max-h-40 p-[1px] '>
+        { props.items.map(item => (
+          <div key={item}
+            onClick={() => props.onSelected(item)}
+            className='border border-transparent hover:bg-vscode-editor-background
+                       hover:border-vscode-focusBorder px-1 '>
+            {item}
+          </div>
+        ))}
+      </div>
+    }
   </div>;
 }
