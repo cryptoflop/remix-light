@@ -15,6 +15,35 @@
     "*"
   ],
   "contributes": {
+    "configuration": {
+      "title": "Remix Light",
+      "properties": {
+        "remix-light.useCompiler": {
+          "order": 1,
+          "type": "boolean",
+          "default": true,
+          "description": "Defines if the compiler should be active."
+        },
+        "remix-light.autoCompile": {
+          "order": 2,
+          "type": "boolean",
+          "default": false,
+          "description": "Defines if contracts should be automaitcally compiled when saved."
+        },
+        "remix-light.contractGlobPattern": {
+          "order": 3,
+          "type": "string",
+          "default": "**/*.sol",
+          "description": "Pattern used to search for solidity contract files used by the compiler."
+        },
+        "remix-light.artifactGlobPattern": {
+          "order": 4,
+          "type": "string",
+          "default": null,
+          "description": "Pattern used to search for solidity contract artifact files wich will be added to the deployable contracts."
+        }
+      }
+    },
     "viewsContainers": {
       "activitybar": [
         {

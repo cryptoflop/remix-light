@@ -20,14 +20,16 @@ export default function Input(props: {
     { open &&
       <div className='absolute bg-vscode-dropdown-background left-[-1px] right-[-1px] top-6
                       border border-vscode-focusBorder max-h-40 p-[1px] z-50 overflow-y-auto'>
-        { props.items.map(item => (
+        { props.items.length ? props.items.map(item => (
           <div key={item}
             onClick={() => props.onSelected(item)}
             className='border border-transparent hover:bg-vscode-editor-background
                        hover:border-vscode-focusBorder px-1 text-ellipsis overflow-hidden'>
             {item}
           </div>
-        ))}
+        )) : <div className='px-1 opacity-50'>
+          No entries
+        </div>}
       </div>
     }
   </div>;

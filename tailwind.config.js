@@ -4,6 +4,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'remix-action-accent': '#c97539',
+        'remix-action-accent-highlight': '#db8242',
+        'remix-action-accent-secondary': '#355f7d',
+        'remix-action-accent-secondary-highlight': '#406e8f',
+
         'vscode-focusBorder': 'var(--vscode-focusBorder)',
         'vscode-input-background': 'var(--vscode-input-background)',
         'vscode-input-foreground': 'var(--vscode-input-foreground)',
@@ -28,7 +33,8 @@ module.exports = {
         'vscode-editor-background': 'var(--vscode-editor-background)',
         'vscode-editorWidget-border': 'var(--vscode-editorWidget-border)',
         'vscode-editorError-foreground': 'var(--vscode-editorError-foreground)',
-        'vscode-editorWarning-foreground': 'var(--vscode-editorWarning-foreground)'
+        'vscode-editorWarning-foreground': 'var(--vscode-editorWarning-foreground)',
+        'vscode-toolbar-hoverBackground': 'var(--vscode-toolbar-hoverBackground)'
       }
     }
   },

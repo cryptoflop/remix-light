@@ -3,6 +3,7 @@ import Button from './components/Button';
 import Checkbox from './components/Checkbox';
 import Dropdown from './components/Dropdown';
 import Label from './components/Label';
+import DeployedContracts from './DeployedContracts';
 import { useResource } from './hooks/useResource';
 import { useTransform } from './hooks/useTransform';
 import { send } from './utils';
@@ -14,7 +15,6 @@ const shortPath = (path: string): string => {
 
 export default function Container() {
   const [useCompiler, setUseCompiler] = useResource('useCompiler', true);
-  const [compiler, setCompiler] = useResource<string>('compilerVersion');
   const [autoCompile, setAutoCompile] = useResource('autoCompile', false);
   const [contracts] = useTransform(useResource<string[]>('contracts', []), contracts => contracts.map(shortPath));
   const [activeContract] = useTransform(useResource<string>('openedContract'), contract => contract && shortPath(contract));
@@ -33,14 +33,11 @@ export default function Container() {
     <Checkbox state={useCompiler} onStateChanged={setUseCompiler}>Compiler</Checkbox>
     { useCompiler &&
       <>
-        <Label label="Version">
-          <Dropdown selected={compiler} items={['Version1', 'Version2', 'Version3']} onSelected={setCompiler} />
-        </Label>
         <Checkbox state={autoCompile} onStateChanged={setAutoCompile}>Auto compile</Checkbox>
         <Label label="Contract">
           <Dropdown selected={activeContract} items={contracts} onSelected={c => send({ event: 'setActiveContract', data: c })} />
         </Label>
-        <Button primary={true}>Compile</Button>
+        <Button type="primary">Compile</Button>
       </>
     }
     <div className='w-full border-b border-vscode-editorWidget-border'></div>
@@ -50,9 +47,9 @@ export default function Container() {
     <Label label="Contract">
       <Dropdown selected={contract} items={compiledContracts} onSelected={setContract} />
     </Label>
-    <Button primary={true}>Deploy</Button>
-    <Label label={contract || 'No contract deployed'}>
-
+    <Button type='accent'>Deploy</Button>
+    <Label label="Deployed Contracts">
+      <DeployedContracts />
     </Label>
   </div>;
 }

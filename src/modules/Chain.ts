@@ -2,6 +2,7 @@ import { Provider, extend } from '@remix-project/remix-simulator';
 import { BN } from 'ethereumjs-util';
 
 import type Web3Type from 'web3';
+import type { SubscribableResources } from './Resources';
 // ugly web3 🤮
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Web3 = require('web3');
@@ -21,19 +22,19 @@ type Web3Extended = Web3Type & { eth: (typeof Web3Type.prototype.eth) & {
 export const EMPTY = '0x';
 
 export class Chain {
-
   public web3: Web3Extended;
 
-  public static async spinup() {
+  constructor() {
     const chain = new Provider({ fork: 'london' });
-    await chain.init();
+    chain.init();
     const web3 = new Web3(chain);
     extend(web3);
-    return new Chain(web3);
+
+    this.web3 = web3;
   }
 
-  constructor(web3Instance: Web3Extended) {
-    this.web3 = web3Instance;
+  public registerResources(subscribableResources: SubscribableResources) {
+    subscribableResources['accounts'] = async () => await this.web3.eth.getAccounts();
   }
 
   public async deployContract(from: string, abi: string) {

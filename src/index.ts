@@ -1,4 +1,3 @@
-import { init } from './chain';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const solc = require('solc');
 
@@ -84,3 +83,7 @@ const solc = require('solc');
 
   // setInterval(() => 1, 10000);
 })();
+function init() {
+  throw new Error('Function not implemented.');
+}
+

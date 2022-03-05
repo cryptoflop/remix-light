@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
 
-export default class RemixViewProvider implements vscode.WebviewViewProvider {
-
+export default class ReactViewProvider implements vscode.WebviewViewProvider {
   private view?: vscode.WebviewView;
-
   private nounce = Date.now();
 
   constructor(
@@ -14,7 +12,7 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    context: vscode.WebviewViewResolveContext,
+    _context: vscode.WebviewViewResolveContext,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _token: vscode.CancellationToken
   ) {
@@ -22,10 +20,7 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
 
     webviewView.webview.options = {
       enableScripts: true,
-
-      localResourceRoots: [
-        this._extensionUri
-      ]
+      localResourceRoots: [this._extensionUri]
     };
 
     this.reload();
@@ -52,12 +47,9 @@ export default class RemixViewProvider implements vscode.WebviewViewProvider {
 
   private getHtml(): string {
     const webview = this.view!.webview;
-    // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'remix-view', 'index.js'));
 
-    const styleResetUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, 'dist', 'remix-view', 'index.css')
-    );
+    const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'remix-view', 'index.css'));
     const codiconsUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css')
     );
