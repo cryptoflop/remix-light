@@ -14,15 +14,25 @@ contract Storage {
       * @dev Store value in variable
       * @param num value to store
       */
-    function store(uint256 num) public {
+    function store(uint256 num) public returns (uint256) {
         number = num;
+        return num;
     }
 
     /**
       * @dev Return value 
       * @return value of 'number'
       */
-    function retrieve() public view returns (uint256){
+    function retrieve() public view returns (uint256, bool) {
+        return (number, true);
+    }
+
+
+    function retrieve2(bool b) public view returns (uint256) {
+        return number;
+    }
+
+    function retrieve3(bool b) public view returns (uint256) {
         return number;
     }
 }

@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Container from './Container';
+import RemixLight from './RemixLight';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Container />
+    <RemixLight />
   </React.StrictMode>,
   document.getElementById('root')
 );

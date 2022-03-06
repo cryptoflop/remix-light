@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { CompiledContract } from 'src/modules/Compiler';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
 import Dropdown from './components/Dropdown';
@@ -13,31 +14,32 @@ const shortPath = (path: string): string => {
   return splits[splits.length - 2] + '/' + splits[splits.length - 1];
 };
 
-export default function Container() {
+export default function RemixLight() {
   const [useCompiler, setUseCompiler] = useResource('useCompiler', true);
   const [autoCompile, setAutoCompile] = useResource('autoCompile', false);
   const [contracts] = useTransform(useResource<string[]>('contracts', []), contracts => contracts.map(shortPath));
-  const [activeContract] = useTransform(useResource<string>('openedContract'), contract => contract && shortPath(contract));
+  const [openedContract, setOpenedContract] = useTransform(
+    useResource<string>('openedContract'),
+    contract => contract && shortPath(contract)
+  );
 
-  const [account, setAccount] = useState<string>();
-  const [accounts] = useResource<string[]>('accounts', [], accs => !account && setAccount(accs[0]));
+  const [account, setAccount] = useResource<string>('account');
+  const [accounts] = useResource<string[]>('accounts', []);
 
   const [contract, setContract] = useState<string>();
-  const [compiledContracts] = useTransform(useResource<Record<string, boolean>>('compiledContracts', {}), contracts => {
-    return Object.entries(contracts).filter(e => e[1])
-      .map(e => e[0])
-      .map(shortPath);
+  const [compiledContracts] = useTransform(useResource<Record<string, CompiledContract>>('compiledContracts', {}), contracts => {
+    return Object.values(contracts).map(cc => cc.name);
   });
 
-  return <div className='flex flex-col space-y-4'>
+  return <div className='flex flex-col space-y-4 h-[100vh]'>
     <Checkbox state={useCompiler} onStateChanged={setUseCompiler}>Compiler</Checkbox>
     { useCompiler &&
       <>
         <Checkbox state={autoCompile} onStateChanged={setAutoCompile}>Auto compile</Checkbox>
-        <Label label="Contract">
-          <Dropdown selected={activeContract} items={contracts} onSelected={c => send({ event: 'setActiveContract', data: c })} />
+        <Label label="File">
+          <Dropdown selected={openedContract} items={contracts} onSelected={c => setOpenedContract(c)} />
         </Label>
-        <Button type="primary">Compile</Button>
+        <Button type="primary" onClick={() => send({ event: 'compile' })}>Compile</Button>
       </>
     }
     <div className='w-full border-b border-vscode-editorWidget-border'></div>
@@ -47,7 +49,7 @@ export default function Container() {
     <Label label="Contract">
       <Dropdown selected={contract} items={compiledContracts} onSelected={setContract} />
     </Label>
-    <Button type='accent'>Deploy</Button>
+    <Button type='accent' onClick={() => send({ event: 'deploy', data: contract })}>Deploy</Button>
     <Label label="Deployed Contracts">
       <DeployedContracts />
     </Label>

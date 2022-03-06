@@ -22,9 +22,10 @@ export default function Input(props: {
                       border border-vscode-focusBorder max-h-40 p-[1px] z-50 overflow-y-auto'>
         { props.items.length ? props.items.map(item => (
           <div key={item}
-            onClick={() => props.onSelected(item)}
-            className='border border-transparent hover:bg-vscode-editor-background
-                       hover:border-vscode-focusBorder px-1 text-ellipsis overflow-hidden'>
+            onClick={() => item !== props.selected && props.onSelected(item)}
+            className={`border border-transparent hover:bg-vscode-editor-background
+                       hover:border-vscode-focusBorder px-1 text-ellipsis overflow-hidden ` +
+                       (item === props.selected ? 'bg-vscode-editor-background' : '')}>
             {item}
           </div>
         )) : <div className='px-1 opacity-50'>

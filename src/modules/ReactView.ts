@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import type { ResourceSetOnObj } from './Resources';
 
 export default class ReactViewProvider implements vscode.WebviewViewProvider {
   private view?: vscode.WebviewView;
@@ -7,7 +8,13 @@ export default class ReactViewProvider implements vscode.WebviewViewProvider {
   constructor(
     private readonly _extensionUri: vscode.Uri,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private readonly webViewApi: Record<string, (data: any) => void>) { }
+    private readonly webViewApi: Record<string, (data: any) => void>,
+    $resourceSetOnObj: ResourceSetOnObj
+  ) {
+    $resourceSetOnObj.subscribe(e => {
+      this.send({ event: 'resourceUpdate', data: { resource: e.prop, data: e.value } });
+    });
+  }
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,

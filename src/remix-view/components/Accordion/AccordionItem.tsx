@@ -12,7 +12,7 @@ export default function AccordionItem(props: {  label: string, children?: ReactN
     <div className={'flex items-center text-vscode-dropdown-foreground hover:bg-vscode-toolbar-hoverBackground cursor-pointer'}
       onClick={() => setOpen(!open)}>
       <Icon name={open ? 'chevron-down' : 'chevron-right'} />
-      <div className='ml-1 mr-auto' style={{ lineHeight: '16px'}}>{props.label}</div>
+      <div className='ml-1 mr-auto text-ellipsis overflow-hidden whitespace-nowrap' style={{ lineHeight: '16px'}}>{props.label}</div>
       { header }
     </div>
     { open && content }

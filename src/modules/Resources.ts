@@ -1,17 +1,19 @@
 import { Subject } from 'rxjs';
 
-export default function createResources(onSet: (prop: string, value: unknown) => void) {
+export default function createResources() {
+  const resourceSetOnObjSub = new Subject<{ prop: string, value: unknown }>();
+
   const resources = new Proxy({}, {
     set(target: { [key: string]: unknown }, prop: string, value: unknown) {
       target[prop] = value;
-      onSet(prop, value);
+      resourceSetOnObjSub.next({ prop, value });
       return true;
     }
   });
 
   const subscribableResources: Record<string, (() => Promise<unknown>) | undefined> = {};
 
-  const $resourceSet = new Subject<{ resource: string, data: unknown }>();
+  const resourceSetSub = new Subject<{ resource: string, data: unknown }>();
 
   const api = {
     subscribeToResource: async (resource: string) => {
@@ -30,13 +32,14 @@ export default function createResources(onSet: (prop: string, value: unknown) =>
     },
     setResource: (msg: { resource: string, data: unknown }) => {
       resources[msg.resource] = msg.data;
-      $resourceSet.next(msg);
+      resourceSetSub.next(msg);
     }
   };
 
-  return [resources, api, $resourceSet.asObservable(), subscribableResources] as const;
+  return [resources, api, resourceSetSub.asObservable(), subscribableResources, resourceSetOnObjSub.asObservable()] as const;
 }
 
 export type Resources = ReturnType<typeof createResources>[0];
 export type ResourceSetObservable = ReturnType<typeof createResources>[2];
 export type SubscribableResources = ReturnType<typeof createResources>[3];
+export type ResourceSetOnObj = ReturnType<typeof createResources>[4];
