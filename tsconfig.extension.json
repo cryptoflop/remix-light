@@ -1,0 +1,23 @@
+{
+	"extends": "./tsconfig",
+	"exclude": [
+		"src/remix-view",
+		"src/assets"
+	],
+	"watchOptions": {
+		"excludeDirectories": [
+			"src/remix-view",
+			"src/assets"
+		],
+	},
+	"files": [
+		"src/extension.ts"
+	],
+	"compilerOptions": {
+		"module": "CommonJS",
+		"outDir": "./dist/",
+		"lib": [
+			"ESNext"
+		]
+	}
+}

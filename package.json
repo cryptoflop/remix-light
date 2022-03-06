@@ -80,11 +80,11 @@
     ]
   },
   "scripts": {
-    "watch": "npx tsc ./src/extension.ts --outDir ./dist/ --skipLibCheck --watch --inlineSourceMap",
+    "watch": "npx tsc --watch --project ./tsconfig.extension.json",
     "tsc-build": "npx tsc ./src/extension.ts --outDir ./dist/ --skipLibCheck",
     "start": "node ./dist/index.js",
     "vscode:prepublish": "npm run tsc-build",
-    "react-bundle": "esbuild ./src/remix-view/index.tsx --bundle --loader:.png=file --outdir=./dist/remix-view --sourcemap=inline --watch",
+    "react-bundle": "esbuild ./src/remix-view/index.tsx --bundle --outdir=./dist/remix-view --sourcemap=inline --watch --tsconfig=./tsconfig.remixview.json",
     "css": "tailwindcss -i ./src/remix-view/index.css -o ./dist/remix-view/index.css --watch",
     "dev": "concurrently 'npm:watch' 'npm:css' 'npm:react-bundle'"
   },

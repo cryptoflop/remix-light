@@ -1,22 +1,16 @@
 {
-  "include": [
-    "src",
-    "types"
-  ],
   "compilerOptions": {
-    "module": "ES2022",
-    "target": "ES6",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "target": "ES2020",
     "moduleResolution": "node",
     "jsx": "preserve",
     "baseUrl": "./",
-    /* paths - import rewriting/resolving */
-    "paths": {
-      // "https://cdn.skypack.dev/three": ["node_modules/@types/three"]
-    },
-    "noEmit": true,
-    /* Additional Options */
     "strict": true,
     "skipLibCheck": true,
+    "inlineSourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
