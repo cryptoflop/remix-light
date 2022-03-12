@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
   const contractFileWatcher = new ContractFileWatcher(resources);
   contractFileWatcher.subscribeResources($resourceSet);
 
-  const deployer = new ContractDeployer(chain, resources, contractFileWatcher);
+  const deployer = new ContractDeployer(chain, resources, contractFileWatcher, out);
 
   const compiler = new Compiler(resources, contractFileWatcher, out);
   compiler.subscribeResources($resourceSet);

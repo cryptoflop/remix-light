@@ -3,6 +3,7 @@ import type { CompiledContract } from 'src/modules/Compiler';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
 import Dropdown from './components/Dropdown';
+import IconButton from './components/IconButton';
 import Label from './components/Label';
 import DeployedContracts from './DeployedContracts';
 import { useResource } from './hooks/useResource';
@@ -43,10 +44,12 @@ export default function RemixLight() {
       </>
     }
     <div className='w-full border-b border-vscode-editorWidget-border'></div>
-    <Label label="Account">
+    <Label label="Account" className='relative'>
+      <IconButton name='file-binary' title='Copy' className='rounded-none absolute z-10 top-[-23px] right-0 h-6'
+        onClick={() => navigator.clipboard.writeText(account)} />
       <Dropdown selected={account} items={accounts} onSelected={setAccount} />
     </Label>
-    <Label label="Contract">
+    <Label label="Compiled contracs">
       <Dropdown selected={contract} items={compiledContracts} onSelected={setContract} />
     </Label>
     <Button type='accent' onClick={() => send({ event: 'deploy', data: contract })}>Deploy</Button>

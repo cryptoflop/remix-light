@@ -36,12 +36,21 @@ export class Chain {
 
   public registerResources(subscribableResources: SubscribableResources) {
     subscribableResources['accounts'] = async () => {
-      const accounts = await this.web3.eth.getAccounts();
-      if (!this.resources.account) {
-        this.resources.account = accounts[0];
-      }
-      return accounts;
+      return await this.fetchAccounts();
     };
+  }
+
+  private async fetchAccounts(): Promise<string[]> {
+    const accounts = await this.web3.eth.getAccounts();
+    if (accounts?.length < 15) {
+      // eth node should have 15 accounts to control
+      await (new Promise(r => setTimeout(r, 250)));
+      return await this.fetchAccounts();
+    }
+    if (!this.resources.account) {
+      this.resources.account = accounts[0];
+    }
+    return accounts;
   }
 
   public async deployContract(from: string, bytecode: string) {

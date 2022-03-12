@@ -1,3 +1,4 @@
+import type * as vscode from 'vscode';
 import type { Chain } from './Chain';
 import type { CompiledContract } from './Compiler';
 import type ContractFileWatcher from './ContractFileWatcher';
@@ -14,7 +15,7 @@ export default class ContractDeployer {
 
   public api;
 
-  constructor(private chain: Chain, private resources: Resources, cfw: ContractFileWatcher) {
+  constructor(private chain: Chain, private resources: Resources, cfw: ContractFileWatcher, private out: vscode.OutputChannel) {
     this.api = {
       deploy: (contractStr: string) => {
         const splits = contractStr.split(' - ');
@@ -35,25 +36,32 @@ export default class ContractDeployer {
   }
 
   private async fn(id: string, fn: string, params: string[], run: boolean) {
-    const contract = this.contractById(id)!;
-    const abi = contract.abi.find(d => d.name === fn)!;
-    const paramList = [this.resources.account as string,
-      contract.address,
-      abi,
-      abi.outputs.map(o => o.type),
-      params] as const;
-    const result = run ? await this.chain.runContractFunction(...paramList) : await this.chain.callContractFunction(...paramList);
+    try {
+      const contract = this.contractById(id)!;
+      const abi = contract.abi.find(d => d.name === fn)!;
+      const paramList = [this.resources.account as string,
+        contract.address,
+        abi,
+        abi.outputs.map(o => o.type),
+        params] as const;
+      const result = run ? await this.chain.runContractFunction(...paramList) : await this.chain.callContractFunction(...paramList);
 
-    // in general this could be done more perfomant if we send results via an event not over a resource...
-    this.resources.deployedContracts = {
-      ...this.resources.deployedContracts as object,
-      [id]: { ...contract, state: {
-        ...contract.state,
-        [fn]: Object.entries(result)
-          .filter(e => !e[0].startsWith('_'))
-          .map(e => e[1])
-      } }
-    } as DeployedContracts;
+      if (result.length > 0) {
+        // in general this could be done more perfomant if we send results via an event not over a resource...
+        this.resources.deployedContracts = {
+          ...this.resources.deployedContracts as object,
+          [id]: { ...contract, state: {
+            ...contract.state,
+            [fn]: Object.entries(result)
+              .filter(e => !e[0].startsWith('_'))
+              .map(e => e[1])
+          } }
+        } as DeployedContracts;
+      }
+    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.out.appendLine((e as any)?.reason || e);
+    }
   }
 
   async deploy(id: string) {
