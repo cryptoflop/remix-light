@@ -2,10 +2,10 @@ import { Provider, extend } from '@remix-project/remix-simulator';
 import type { Resources, SubscribableResources } from './Resources';
 import { BN } from 'ethereumjs-util';
 
-import type Web3Type from 'web3';
 // ugly web3 🤮
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Web3 = require('web3');
+import type Web3Type from 'web3';
 
 type Web3Extended = Web3Type & { eth: (typeof Web3Type.prototype.eth) & {
   getHashFromTagBySimulator: (tag: number) => Promise<string>,

@@ -7,6 +7,23 @@ import ContractFileWatcher from './modules/ContractFileWatcher';
 import ReactViewProvider from './modules/ReactView';
 import createResources from './modules/Resources';
 
+(() => {
+  // This looks awful and it is, but hear me out...
+  // You should never touch prototype properties but unfortunately, some libaries do.
+  // One example of such a library is mscorelib.
+  // I developed this extension to run in symbiosis with the Solidity extension (https://github.com/juanfranblanco/vscode-solidity)
+  // some library the Solidity extension uses, requires mscorelib...
+  // The remix-simulator library is need, uses the for in syntax with arrays (wich you shouldn't do as well)
+  // If you add 1+1 you can see why this is a problem.
+  // This is why I decided to clear the Array.prototype from the properties added by mscorelib
+  // in order to use my librarys without errors.
+  // Maybe there will be subsequent errors I haven't encountered but right now it seems like this fixes it.
+  for (const k in []) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (Array.prototype as any)[k];
+  }
+})();
+
 export function activate(context: vscode.ExtensionContext) {
   const out = vscode.window.createOutputChannel('Remix-Light');
 
@@ -31,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const deployer = new ContractDeployer(chain, resources, contractFileWatcher);
 
-  const compiler = new Compiler(resources, contractFileWatcher);
+  const compiler = new Compiler(resources, contractFileWatcher, out);
   compiler.subscribeResources($resourceSet);
 
   const remixViewProvider = new ReactViewProvider(context.extensionUri, {

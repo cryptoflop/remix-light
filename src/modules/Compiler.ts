@@ -23,12 +23,17 @@ export default class Compiler {
 
   public api;
 
-  constructor(private resources: Resources, public cfw: ContractFileWatcher) {
+  constructor(private resources: Resources, public cfw: ContractFileWatcher, private out: vscode.OutputChannel) {
     this.api = {
       compile: () => {
         const opendContract = cfw.openedContract;
         if (opendContract) {
-          this.compile(opendContract);
+          (async () => {
+            if (!(await this.compile(opendContract))) {
+              // show output channel if compile was called and there was an error
+              out.show();
+            }
+          })();
         }
       }
     };
@@ -73,7 +78,7 @@ export default class Compiler {
   }
 
   async compile(file: vscode.Uri) {
-    if (!this.resources.useCompiler) return;
+    if (!this.resources.useCompiler) return true;
 
     const input = {
       language: 'Solidity',
@@ -96,6 +101,15 @@ export default class Compiler {
 
     const output = JSON.parse(solc.compile(JSON.stringify(input), { import: this.findImports }));
 
+    if (output.errors) {
+      for (const e of output.errors) {
+        this.out.appendLine(e.formattedMessage);
+      }
+      return false;
+    } else {
+      this.out.appendLine(`Sucessfully compiled: ${file.path} \n`);
+    }
+
     const compiledContracts: Record<string, CompiledContract> = {};
     Object.entries(output.contracts[file.path])
       .map(e => {
@@ -111,6 +125,8 @@ export default class Compiler {
       ...this.resources.compiledContracts as object,
       ...compiledContracts
     };
+
+    return true;
   }
 
 }
