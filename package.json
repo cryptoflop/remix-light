@@ -80,7 +80,7 @@
     ]
   },
   "scripts": {
-    "extension-bundle": "esbuild ./src/extension.ts --bundle --outdir=./dist --sourcemap=inline --watch --external:vscode --external:electron --external:./compiler-worker --platform=node --format=cjs --tsconfig=./tsconfig.extension.json",
+    "extension-bundle": "esbuild ./src/extension.ts --bundle --outdir=./dist --sourcemap=inline --watch --external:vscode --external:electron --platform=node --format=cjs --tsconfig=./tsconfig.extension.json",
     "react-bundle": "esbuild ./src/remix-view/index.tsx --bundle --outdir=./dist/remix-view --sourcemap=inline --watch --tsconfig=./tsconfig.remixview.json",
     "css": "tailwindcss -i ./src/remix-view/index.css -o ./dist/remix-view/index.css --watch",
     "dev": "concurrently 'npm:extension-bundle' 'npm:css' 'npm:react-bundle'",
