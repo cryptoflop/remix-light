@@ -19,7 +19,7 @@ function useDeployedContract(id: string) {
   return deployedContracts[id];
 }
 
-const inputSignature = (inputs: CompiledContract['abi'][0]['inputs']): string => {
+const inputPlaceholder = (inputs: CompiledContract['abi'][0]['inputs']): string => {
   return inputs.map(i => `${i.type}: ${i.name}`).join(', ');
 };
 
@@ -40,7 +40,7 @@ function ContractFunctions(props: {
     .filter(f => f.type === 'function')
     .filter(props.filter);
 
-  return <Label label={props.label} className='flex flex-col first:mt-0 space-y-2'>
+  return fns.length ? <Label label={props.label} className='flex flex-col first:mt-0 space-y-2'>
     { fns.map(view => <div key={view.name} className="flex flex-col">
       <div className='flex'>
         <Button type={props.type as 'accent'} className='px-1.5 py-0.5 min-w-[5rem] basis-0 flex-grow-[2] text-ellipsis overflow-hidden'
@@ -49,7 +49,7 @@ function ContractFunctions(props: {
           {view.name}
         </Button>
         { view.inputs.length > 0 &&
-            <Input onInput={v => setInputState(v, view.name)} placeholder={inputSignature(view.inputs)} className='flex-grow-[2]' />
+            <Input onInput={v => setInputState(v, view.name)} placeholder={inputPlaceholder(view.inputs)} className='flex-grow-[2]' />
         }
       </div>
       { props.contract.state[view.name] &&
@@ -66,7 +66,7 @@ function ContractFunctions(props: {
           </div>
       }
     </div>)}
-  </Label>;
+  </Label> : <></>;
 }
 
 export default React.memo(function Contract(props: { contract: string }) {

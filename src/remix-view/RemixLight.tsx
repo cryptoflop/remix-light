@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import type { CompiledContract } from 'src/modules/Compiler';
+import React from 'react';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
 import Dropdown from './components/Dropdown';
 import IconButton from './components/IconButton';
 import Label from './components/Label';
+import Deploy from './Deploy';
 import DeployedContracts from './DeployedContracts';
 import { useResource } from './hooks/useResource';
 import { useTransform } from './hooks/useTransform';
@@ -27,11 +27,6 @@ export default function RemixLight() {
   const [account, setAccount] = useResource<string>('account');
   const [accounts] = useResource<string[]>('accounts', []);
 
-  const [contract, setContract] = useState<string>();
-  const [compiledContracts] = useTransform(useResource<Record<string, CompiledContract>>('compiledContracts', {}), contracts => {
-    return Object.values(contracts).map(cc => cc.name);
-  });
-
   return <div className='flex flex-col space-y-4 h-[100vh]'>
     <Checkbox state={useCompiler} onStateChanged={setUseCompiler}>Compiler</Checkbox>
     { useCompiler &&
@@ -49,10 +44,7 @@ export default function RemixLight() {
         onClick={() => navigator.clipboard.writeText(account)} />
       <Dropdown selected={account} items={accounts} onSelected={setAccount} />
     </Label>
-    <Label label="Compiled contracs">
-      <Dropdown selected={contract} items={compiledContracts} onSelected={setContract} />
-    </Label>
-    <Button type='accent' onClick={() => send({ event: 'deploy', data: contract })}>Deploy</Button>
+    <Deploy />
     <Label label="Deployed Contracts">
       <DeployedContracts />
     </Label>

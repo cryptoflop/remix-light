@@ -107,8 +107,10 @@ export default class Compiler {
       }
       return false;
     } else {
-      this.out.appendLine(`Sucessfully compiled: ${file.path} \n`);
+      this.out.appendLine(`Successfully compiled: ${file.path} \n`);
     }
+
+    if (!output.contracts) { return true; }
 
     const compiledContracts: Record<string, CompiledContract> = {};
     Object.entries(output.contracts[file.path])

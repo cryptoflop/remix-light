@@ -53,10 +53,11 @@ export class Chain {
     return accounts;
   }
 
-  public async deployContract(from: string, bytecode: string) {
+  public async deployContract(from: string, bytecode: string, types: string[], params: string[]) {
+    const paramsbytecode = this.web3.eth.abi.encodeParameters(types, params).slice(2);
     const tx = await this.sendTx({
       from: from,
-      data: bytecode
+      data: bytecode + paramsbytecode
     });
     return tx.contractAddress;
   }
