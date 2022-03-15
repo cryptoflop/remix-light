@@ -2,11 +2,12 @@ import React, { ReactNode, useState } from 'react';
 import Icon from '../Icon';
 import AccordionHeader from './AccordionHeader';
 
-export default function AccordionItem(props: {  label: string, children?: ReactNode[] }) {
+export default function AccordionItem(props: {  label: string, children?: ReactNode | ReactNode[] }) {
   const [open, setOpen] = useState(false);
+  const children = props.children instanceof Array ? props.children : [props.children];
 
-  const header = props.children?.find(c => (c as JSX.Element).type === AccordionHeader);
-  const content = props.children?.filter(c => c !== header);
+  const header = children?.find(c => (c as JSX.Element).type === AccordionHeader);
+  const content = children?.filter(c => c !== header);
 
   return <div className='flex flex-col w-full'>
     <div className={'flex items-center text-vscode-dropdown-foreground hover:bg-vscode-toolbar-hoverBackground cursor-pointer'}

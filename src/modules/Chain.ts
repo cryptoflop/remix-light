@@ -59,27 +59,34 @@ export class Chain {
       from: from,
       data: bytecode + paramsbytecode
     });
-    return tx.contractAddress;
+    return { address: tx.contractAddress, cost: tx.gasUsed, hash: tx.transactionHash };
   }
 
-  public async callContractFunction(from: string, contract: string, abi: Record<string, unknown>, types: string[], params: string[]) {
-    return this.web3.eth.abi.decodeParameters(types, await this.web3.eth.call({
+  public async call(from: string, contract: string, abi: Record<string, unknown>, types: string[], params: string[]) {
+    const callInput = {
       from,
       to: contract,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: this.web3.eth.abi.encodeFunctionCall(abi as any, params)
-    }));
+    };
+    const result = this.web3.eth.abi.decodeParameters(types, await this.web3.eth.call(callInput));
+    const estimatedGas = await this.web3.eth.estimateGas({
+      to: '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
+      data: '0xc6888fa10000000000000000000000000000000000000000000000000000000000000003'
+    });
+    return { result, cost: estimatedGas, hash: 'No transaction hash.' };
   }
 
-  public async runContractFunction(from: string, contract: string, abi: Record<string, unknown>, types: string[], params: string[]) {
+  public async tx(from: string, contract: string, abi: Record<string, unknown>, types: string[], params: string[]) {
     const tx = await this.sendTx({
       from,
       to: contract,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: this.web3.eth.abi.encodeFunctionCall(abi as any, params)
     });
-    const result = await this.web3.eth.getExecutionResultFromSimulator(tx.transactionHash);
-    return this.web3.eth.abi.decodeParameters(types, result.returnValue.toString('hex'));
+    const exec = await this.web3.eth.getExecutionResultFromSimulator(tx.transactionHash);
+    const result = this.web3.eth.abi.decodeParameters(types, exec.returnValue.toString('hex'));
+    return { result, cost: tx.gasUsed, hash: tx.transactionHash };
   }
 
   public async sendEth(from: string, to: string, amount: BN | number | string) {

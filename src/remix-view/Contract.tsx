@@ -8,7 +8,7 @@ import Label from './components/Label';
 import { useResource } from './hooks/useResource';
 import { send } from './utils';
 
-const sendFn = (type: 'call' | 'run', contractId: string, fn: string, params = '') => {
+const sendFn = (type: 'call' | 'tx', contractId: string, fn: string, params = '') => {
   send({ event: type, data: { id: contractId, fn, params: params.split(',')
     .map(p => p.trim())
     .filter(p => p) } });
@@ -80,7 +80,7 @@ export default React.memo(function Contract(props: { contract: string }) {
       onClick={(fn, params) => sendFn('call', contract.id, fn, params)} type='accent-secondary'
     />
     <ContractFunctions contract={contract} label='Functions' filter={f => !f.stateMutability.includes('view')}
-      onClick={(fn, params) => sendFn('run', contract.id, fn, params)} type='accent'
+      onClick={(fn, params) => sendFn('tx', contract.id, fn, params)} type='accent'
     />
   </div>;
 }, (p, n) => p.contract === n.contract);

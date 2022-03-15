@@ -22,15 +22,7 @@ contract Storage {
      * @dev Return value
      * @return value of 'number'
      */
-    function retrieve() public view returns (uint256, bool) {
-        return (number, true);
-    }
-
-    function retrieve2(bool b) public view returns (uint256) {
-        return number;
-    }
-
-    function retrieve3(bool b) public view returns (uint256) {
+    function retrieve() public view returns (uint256) {
         return number;
     }
 }

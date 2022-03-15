@@ -8,6 +8,7 @@ import Deploy from './Deploy';
 import DeployedContracts from './DeployedContracts';
 import { useResource } from './hooks/useResource';
 import { useTransform } from './hooks/useTransform';
+import TxHistory from './TxHistory';
 import { send } from './utils';
 
 const shortPath = (path: string): string => {
@@ -45,8 +46,9 @@ export default function RemixLight() {
       <Dropdown selected={account} items={accounts} onSelected={setAccount} />
     </Label>
     <Deploy />
-    <Label label="Deployed Contracts">
+    <Label label="Deployed Contracts" containerClassName='flex-grow'>
       <DeployedContracts />
     </Label>
+    <TxHistory />
   </div>;
 }

@@ -29,7 +29,7 @@ export default React.memo(function Deploy() {
 
   return <>
     <Label label="Compiled contracs">
-      <Dropdown selected={contract} items={compiledContractsList} onSelected={setContract} />
+      <Dropdown selected={contract} items={compiledContractsList} onSelected={c => { setDeployParams(undefined); setContract(c); }} />
     </Label>
     { selectedContract && <div className='flex'>
       <Button type='accent' onClick={() => deploy(contract!, deployParams)} className="flex-grow">
