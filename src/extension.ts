@@ -11,13 +11,13 @@ import createResources from './modules/Resources';
   // This looks awful and it is, but hear me out...
   // You should never touch prototype properties but unfortunately, some libaries do.
   // One example of such a library is mscorelib.
-  // I developed this extension to run in symbiosis with the Solidity extension (https://github.com/juanfranblanco/vscode-solidity)
-  // some library the Solidity extension uses, requires mscorelib...
-  // The remix-simulator library is need, uses the for in syntax with arrays (wich you shouldn't do as well)
+  // I developed this extension to work in symbiosis with the Solidity extension (https://github.com/juanfranblanco/vscode-solidity)
+  // Some library the Solidity extension uses, requires mscorelib...
+  // The remix-simulator library I need, uses the for in syntax with arrays (wich you shouldn't do as well)
   // If you add 1+1 you can see why this is a problem.
   // This is why I decided to clear the Array.prototype from the properties added by mscorelib
   // in order to use my librarys without errors.
-  // Maybe there will be subsequent errors I haven't encountered but right now it seems like this fixes it.
+  // Maybe there will be subsequent errors I haven't encountered yet, but right now it seems like this fixes it.
   for (const k in []) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (Array.prototype as any)[k];
