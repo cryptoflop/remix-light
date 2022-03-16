@@ -1,6 +1,6 @@
 # remix-light
 
-A light version of the [Remix Ethereum IDE](https://remix.ethereum.org/) as a VSCode [extension](https://marketplace.visualstudio.com/vscode).
+A light version of the [Remix Ethereum IDE](https://remix.ethereum.org/) as a VSCode [extension](https://marketplace.visualstudio.com/items?itemName=maxdavidwow.remix-light).
 
 ## Bugs and Suggestions
 
