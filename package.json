@@ -1,7 +1,7 @@
 {
   "name": "remix-light",
   "displayName": "remix-light",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A light version of the Remix Ethereum IDE as a VSCode extension",
   "author": "maxdavid",
   "publisher": "maxdavidwow",
