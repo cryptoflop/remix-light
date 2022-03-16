@@ -46,9 +46,12 @@ export default function RemixLight() {
       <Dropdown selected={account} items={accounts} onSelected={setAccount} />
     </Label>
     <Deploy />
-    <Label label="Deployed Contracts" containerClassName='flex-grow'>
+    <Label label="Deployed Contracts"
+      containerClassName='flex-grow overflow-hidden grid grid-rows-[auto,1fr]'
+      className='overflow-y-auto'>
       <DeployedContracts />
     </Label>
+    <div className='w-full border-b border-vscode-editorWidget-border'></div>
     <TxHistory />
   </div>;
 }

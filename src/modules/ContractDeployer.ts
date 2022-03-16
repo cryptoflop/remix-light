@@ -68,9 +68,10 @@ export default class ContractDeployer {
       const tx = isTx ? await this.chain.tx(...paramList) : await this.chain.call(...paramList);
 
       this.addTxToHistory({
-        contract: contract.name,
+        contract: contract.name.split(' - ')[0],
         from: this.resources.account as string,
         to: contract.address,
+        fn: fn,
         status: isTx ? 'success' : undefined,
         cost: tx.cost,
         hash: tx.hash
@@ -102,7 +103,7 @@ export default class ContractDeployer {
       const tx = await this.chain.deployContract(this.resources.account as string, contract.bytecode, types, params);
 
       this.addTxToHistory({
-        contract: contract.name,
+        contract: contract.name.split(' - ')[0],
         from: this.resources.account as string,
         to: tx.address as string,
         status: 'success',

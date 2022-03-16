@@ -1,6 +1,7 @@
 import { Provider, extend } from '@remix-project/remix-simulator';
 import type { Resources, SubscribableResources } from './Resources';
 import { BN } from 'ethereumjs-util';
+import crypto from 'crypto';
 
 // ugly web3 🤮
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -70,11 +71,8 @@ export class Chain {
       data: this.web3.eth.abi.encodeFunctionCall(abi as any, params)
     };
     const result = this.web3.eth.abi.decodeParameters(types, await this.web3.eth.call(callInput));
-    const estimatedGas = await this.web3.eth.estimateGas({
-      to: '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
-      data: '0xc6888fa10000000000000000000000000000000000000000000000000000000000000003'
-    });
-    return { result, cost: estimatedGas, hash: 'No transaction hash.' };
+    const estimatedGas = await this.web3.eth.estimateGas(callInput);
+    return { result, cost: estimatedGas, hash: '0x' + crypto.randomBytes(32).toString('hex') };
   }
 
   public async tx(from: string, contract: string, abi: Record<string, unknown>, types: string[], params: string[]) {
