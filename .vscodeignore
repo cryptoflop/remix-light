@@ -7,3 +7,4 @@ tsconfig.remixview.json
 tsconfig.extension.json
 tailwind.config.js
 .eslintrc.json
+.gitignore

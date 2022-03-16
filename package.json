@@ -2,7 +2,22 @@
   "name": "remix-light",
   "displayName": "remix-light",
   "version": "0.1.0",
-  "description": "",
+  "description": "A light version of the Remix Ethereum IDE as a VSCode extension",
+  "author": "maxdavid",
+  "publisher": "maxdavidwow",
+  "license": "MIT",
+  "icon": "logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxdavidwow/remix-light"
+  },
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "blockchain",
+    "compiler",
+    "remix"
+  ],
   "main": "./dist/extension.js",
   "engines": {
     "vscode": "^1.34.0"
@@ -12,7 +27,7 @@
     "Other"
   ],
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
   "contributes": {
     "configuration": {
@@ -49,7 +64,7 @@
         {
           "id": "remix-light",
           "title": "remix-light",
-          "icon": "src/assets/logo.svg"
+          "icon": "./logo.svg"
         }
       ]
     },
@@ -80,15 +95,17 @@
     ]
   },
   "scripts": {
-    "extension-bundle": "esbuild ./src/extension.ts --bundle --outdir=./dist --sourcemap=inline --watch --external:vscode --external:electron --platform=node --format=cjs --tsconfig=./tsconfig.extension.json",
-    "react-bundle": "esbuild ./src/remix-view/index.tsx --bundle --outdir=./dist/remix-view --sourcemap=inline --watch --tsconfig=./tsconfig.remixview.json",
-    "css": "tailwindcss -i ./src/remix-view/index.css -o ./dist/remix-view/index.css --watch",
-    "dev": "concurrently 'npm:extension-bundle' 'npm:css' 'npm:react-bundle'",
+    "extension-bundle": "esbuild ./src/extension.ts --bundle --outdir=./dist --external:vscode --external:electron --platform=node --format=cjs --tsconfig=./tsconfig.extension.json",
+    "extension-dev": "npm run extension-bundle -- --sourcemap=inline --watch --define:DEBUG=true",
+    "react-bundle": "esbuild ./src/remix-view/index.tsx --bundle --outdir=./dist/remix-view --tsconfig=./tsconfig.remixview.json",
+    "react-dev": "npm run react-bundle -- --sourcemap=inline --watch --define:DEBUG=true",
+    "css": "tailwindcss -i ./src/remix-view/index.css -o ./dist/remix-view/index.css",
+    "css-dev": "npm run css -- --watch",
+    "dev": "concurrently 'npm:extension-dev' 'npm:css-dev' 'npm:react-dev'",
     "start": "npm run dev",
-    "package": "vsce package"
+    "build": "npm run extension-bundle -- --minify --define:DEBUG=false && npm run react-bundle --minify --define:DEBUG=false && npm run css",
+    "package": "vsce package --githubBranch=main"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@remix-project/remix-simulator": "^0.2.10",
     "@vscode/codicons": "0.0.28",

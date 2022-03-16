@@ -7,6 +7,8 @@ import ContractFileWatcher from './modules/ContractFileWatcher';
 import ReactViewProvider from './modules/ReactView';
 import createResources from './modules/Resources';
 
+declare let DEBUG: boolean;
+
 (() => {
   // This looks awful and it is, but hear me out...
   // You should never touch prototype properties but unfortunately, some libaries do.
@@ -28,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
   const out = vscode.window.createOutputChannel('Remix-Light');
 
   // TODO: use environments
-  vscode.commands.executeCommand('setContext', 'remix-light.debug', true);
+  vscode.commands.executeCommand('setContext', 'remix-light.debug', DEBUG);
 
   const config = vscode.workspace.getConfiguration('remix-light');
 
