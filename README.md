@@ -4,7 +4,7 @@ A light version of the [Remix Ethereum IDE](https://remix.ethereum.org/) as a VS
 
 ## Contribute
 
-To start develop run `npm run dev` and debug the extension through the VSCode debugger.
+Start developing with `npm start` and debug the extension through the VSCode debugger.
 
 ## Bugs and Suggestions
 
