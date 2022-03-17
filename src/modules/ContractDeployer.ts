@@ -91,6 +91,7 @@ export default class ContractDeployer {
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.out.appendLine((e as any)?.reason || e);
+      this.out.show();
     }
   }
 
@@ -118,6 +119,7 @@ export default class ContractDeployer {
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.out.appendLine((e as any)?.reason || e);
+      this.out.show();
     }
   }
 
