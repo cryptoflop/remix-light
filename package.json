@@ -1,7 +1,7 @@
 {
   "name": "remix-light",
   "displayName": "remix-light",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A light version of the Remix Ethereum IDE as a VSCode extension",
   "author": "maxdavid",
   "publisher": "maxdavidwow",
@@ -102,9 +102,9 @@
     "css": "tailwindcss -i ./src/remix-view/index.css -o ./dist/remix-view/index.css",
     "css-dev": "npm run css -- --watch",
     "copy-assets": "node copyAssets.js",
-    "dev": "concurrently 'npm:copy-assets' 'npm:extension-dev' 'npm:css-dev' 'npm:react-dev'",
+    "dev": "concurrently 'npm:extension-dev' 'npm:css-dev' 'npm:react-dev' 'npm:copy-assets'",
     "start": "npm run dev",
-    "build": "npm run copy-assets && npm run extension-bundle -- --minify --define:DEBUG=false && npm run react-bundle --minify --define:DEBUG=false && npm run css",
+    "build": "npm run extension-bundle -- --minify --define:DEBUG=false && npm run react-bundle --minify --define:DEBUG=false && npm run css && npm run copy-assets",
     "package": "vsce package --githubBranch=main"
   },
   "dependencies": {
