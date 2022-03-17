@@ -20,31 +20,63 @@ export interface CompiledContract {
 }
 
 export default class Compiler {
-
   public api;
 
+  public files: vscode.Uri[] = [];
+
+  public openedContract: vscode.Uri | undefined;
+
   constructor(private resources: Resources, public cfw: ContractFileWatcher, private out: vscode.OutputChannel) {
+    let contractFilesMap: Record<string, vscode.Uri> = {};
+    cfw.$files.subscribe(files => {
+      contractFilesMap = files;
+    });
+
+    cfw.$contractOpened.subscribe(file => {
+      if (contractFilesMap[file.path]) {
+        this.openedContract = file;
+        resources.openedContract = file.path;
+      }
+    });
+
+    cfw.$contractSaved.subscribe(file => {
+      if (resources.autoCompile) {
+        this.compile(file);
+      }
+    });
+
+    cfw.$files.subscribe(files => {
+      if (this.openedContract) {
+        if (!files[this.openedContract.path]) {
+          this.openedContract = undefined;
+          resources.openedContract = undefined;
+        }
+      } else {
+        const openEditorFile = vscode.window.activeTextEditor?.document.uri;
+        if (files[openEditorFile?.path || '']) {
+          this.openedContract = openEditorFile;
+          resources.openedContract = openEditorFile?.path;
+        }
+      }
+      this.files = Object.values(files);
+      resources.contracts = this.files.map(uri => uri.path);
+    });
+
+    if (resources.autoCompile) {
+      cfw.$files.pipe(first()).subscribe(() => this.compileAll());
+    }
+
     this.api = {
       compile: () => {
-        const opendContract = cfw.openedContract;
-        if (opendContract) {
-          (async () => {
-            if (!(await this.compile(opendContract))) {
-              // show output channel if compile was called and there was an error
+        if (this.openedContract) {
+          this.compile(this.openedContract).then(success => {
+            if (!success) {
               out.show();
             }
-          })();
+          });
         }
       }
     };
-
-    cfw.$contractSaved.subscribe(file => {
-      this.compile(file);
-    });
-
-    if (resources.autoCompile && resources.useCompiler) {
-      cfw.$filesLoaded.pipe(first()).subscribe(() => this.compileAll());
-    }
   }
 
   subscribeResources($resourceSet: ResourceSetObservable) {
@@ -58,14 +90,16 @@ export default class Compiler {
           this.compileAll();
         }
         break;
-      }
+      case 'openedContract': {
+        const file = this.pathToUri(msg.data as string);
+        if (file) {
+          this.openedContract = file;
+          // open file in vscode
+          vscode.workspace.openTextDocument(file).then(td => vscode.window.showTextDocument(td));
+        }
+        break;
+      }}
     });
-  }
-
-  compileAll() {
-    for (const file of this.cfw.files) {
-      this.compile(file);
-    }
   }
 
   private findImports(path: string) {
@@ -77,7 +111,17 @@ export default class Compiler {
     else return { error: 'File not found' };
   }
 
-  async compile(file: vscode.Uri) {
+  public pathToUri(path: string) {
+    return  this.files.find(f => f.path.includes(path));
+  }
+
+  public compileAll() {
+    for (const file of this.files) {
+      this.compile(file);
+    }
+  }
+
+  public async compile(file: vscode.Uri) {
     if (!this.resources.useCompiler) return true;
 
     const input = {

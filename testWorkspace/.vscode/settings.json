@@ -1,3 +1,4 @@
 {
-	"remix-light.contractGlobPattern": "test/**/*.sol"
+	"remix-light.artifactGlobPattern": "artifacts/**/*.json",
+	"remix-light.autoCompile": true
 }

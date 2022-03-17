@@ -1,9 +1,16 @@
 import { Subject } from 'rxjs';
-import type * as vscode from 'vscode';
+import * as vscode from 'vscode';
+import type ArtifactFileWatcher from './ArtifactFileWatcher';
 import type { Chain } from './Chain';
+import type Compiler from './Compiler';
 import type { CompiledContract } from './Compiler';
-import type ContractFileWatcher from './ContractFileWatcher';
 import type { Resources } from './Resources';
+
+interface MinimalArtifactSet {
+  contractName: string,
+  abi: CompiledContract['abi'],
+  bytecode: string
+}
 
 export interface DeployedContract extends CompiledContract {
 	address: string;
@@ -29,15 +36,47 @@ export default class ContractDeployer {
 
   public api;
 
-  constructor(private chain: Chain, private resources: Resources, cfw: ContractFileWatcher, private out: vscode.OutputChannel) {
+  constructor(
+    private chain: Chain,
+    private resources: Resources,
+    private out: vscode.OutputChannel,
+    compiler: Compiler,
+    afw: ArtifactFileWatcher
+  ) {
     (this.resources.txHistory as Tx[]) = [];
+
+    const artifactUriMap: Record<string, vscode.Uri> = {};
+    afw.$artifactLoaded.subscribe(async file => {
+      const text = (await vscode.workspace.openTextDocument(file)).getText();
+      const artifact = JSON.parse(text) as MinimalArtifactSet;
+
+      const splits = file.path.split('/');
+      const shortPath = splits[splits.length - 2] + '/' + splits[splits.length - 1];
+
+      const id = file.path + '/' + artifact.contractName;
+      const artifactContract = {
+        id, abi: artifact.abi, bytecode: artifact.bytecode, name: artifact.contractName + ' - ' + shortPath
+      } as CompiledContract;
+
+      artifactUriMap[artifactContract.name] = file;
+
+      this.resources.compiledContracts = {
+        ...this.resources.compiledContracts as object,
+        [id]: artifactContract
+      };
+    });
 
     this.api = {
       deploy: (msg: { contract: string, params: string[] }) => {
         const splits = msg.contract.split(' - ');
-        const file = cfw.files.find(f => f.path.includes(splits[1]));
+        const file = compiler.pathToUri(splits[1]);
         if (file) {
           this.deploy(file.path + '/' + splits[0], msg.params);
+        } else {
+          const artifact = artifactUriMap[msg.contract];
+          if (artifact) {
+            this.deploy(artifact.path + '/' + splits[0], msg.params);
+          }
         }
       },
       dispose: (id: string) => this.dispose(id),

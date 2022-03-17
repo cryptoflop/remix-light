@@ -1,0 +1,2502 @@
+{
+  "contractName": "MagicPixels",
+  "abi": [
+    {
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "gas": 35409,
+      "inputs": [
+        {
+          "name": "_mpr",
+          "type": "address"
+        }
+      ],
+      "name": "setMpr",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "gas": 9468,
+      "inputs": [],
+      "name": "conjurePixels",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "gas": 381055,
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "name": "rnds",
+          "type": "uint256[10]"
+        }
+      ],
+      "name": "resolveRnds",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x61019d56600436101561000d576100f4565b60046000601c3760005134610194576301e5f331811861003d576004358060a01c6101945760e05260e051600155005b633423f630811861007e57637217e79960e05233610100526001543b156101945760006000602460fc60006001545af161007c573d600060003e3d6000fd5b005b636dd13ea881186100f2576004358060a01c610194576102a0526102a05160e0526024356101005260443561012052606435610140526084356101605260a4356101805260c4356101a05260e4356101c052610104356101e052610124356102005261014435610220526100f06100fa565b005b505b60006000fd5b6102406000600a818352015b61010061024051600a8110156101945760200201518060081c6101945761026052600060e05160a05260805260406080206102605160a0526080526040608020546102805261028051600181818301106101945780820190509050600060e05160a05260805260406080206102605160a0526080526040608020558151600101808352811415610106575050565b600080fd5b61000461019d0361000460003961000461019d036000f3",
+  "deployedBytecode": "0x600436101561000d576100f4565b60046000601c3760005134610194576301e5f331811861003d576004358060a01c6101945760e05260e051600155005b633423f630811861007e57637217e79960e05233610100526001543b156101945760006000602460fc60006001545af161007c573d600060003e3d6000fd5b005b636dd13ea881186100f2576004358060a01c610194576102a0526102a05160e0526024356101005260443561012052606435610140526084356101605260a4356101805260c4356101a05260e4356101c052610104356101e052610124356102005261014435610220526100f06100fa565b005b505b60006000fd5b6102406000600a818352015b61010061024051600a8110156101945760200201518060081c6101945761026052600060e05160a05260805260406080206102605160a0526080526040608020546102805261028051600181818301106101945780820190509050600060e05160a05260805260406080206102605160a0526080526040608020558151600101808352811415610106575050565b600080fd",
+  "deployedSourceMap": "-1:-1:1:-;;;;;:::-;;:::-;:::-;;;;;;;;;:::-;199:50;;;;:::-;-1:-1;;;;;;:::-;;199:50;244:4;-1:-1;229:8;:20;199:50;:::-;277:56;;;;:::-;301:32;;;322:10;301:32;-1:-1;301:32;;;;;:::-;;;;;;;;;;277:56;301:32::-;;;;;;;;277:56::-;;:::-;568:85;;;;:::-;-1:-1;;;;;;:::-;;568:85;640:6;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;624:29;-1:-1;568:85;624:29;:::i;568:85::-;;:::-;-1:-1;:::-;;;;349:203::-;404:148;;;;;;;:::-;452:4;457:1;452:7;;;;;;:::-;;;;-1:-1;;;;;:::-;429:38;;486:11;498:6;-1:-1;;;;;;;;506:5;-1:-1;;;;;;;;;473:39;429:38;547:1;:5;551:1;-1:-1;;;;;;:::-;;;;547:5;;;;518:11;530:6;-1:-1;;;;;;;;538:5;-1:-1;;;;;;;;518:34;404:148;;;;;;;;;;;:::-;;;349:203::-;-1:-1::-;;;;",
+  "source": "interface MPR:\r\n    def requestRnds(sender: address): nonpayable\r\n\r\n\r\npixels: HashMap[address, HashMap[uint8, uint256]]\r\n\r\nmpr: MPR\r\n\r\n\r\n@external\r\ndef __init__():\r\n  pass\r\n\r\n@external\r\n@nonpayable\r\ndef setMpr(_mpr: address):\r\n  self.mpr = MPR(_mpr)\r\n\r\n@external\r\n@nonpayable\r\ndef conjurePixels():\r\n  self.mpr.requestRnds(msg.sender)\r\n\r\n@internal \r\ndef mintPixels(sender: address, rnds: uint256[10]):\r\n  for i in range(10):\r\n    pxIdx: uint8 = convert(rnds[i], uint8)\r\n    v: uint256 = self.pixels[sender][pxIdx]\r\n    self.pixels[sender][pxIdx] = v + 1\r\n\r\n@external \r\ndef resolveRnds(sender: address, rnds: uint256[10]):\r\n  self.mintPixels(sender, rnds)",
+  "sourcePath": "D:\\dev\\MagicPixels\\smart-contracts\\contracts\\MagicPixels.vy",
+  "ast": {
+    "ast_type": "Module",
+    "body": [
+      {
+        "ast_type": "InterfaceDef",
+        "body": [
+          {
+            "args": {
+              "args": [
+                {
+                  "annotation": {
+                    "ast_type": "Name",
+                    "col_offset": 28,
+                    "end_col_offset": 35,
+                    "end_lineno": 2,
+                    "id": "address",
+                    "lineno": 2,
+                    "node_id": 5,
+                    "src": "44:7:1"
+                  },
+                  "arg": "sender",
+                  "ast_type": "arg",
+                  "col_offset": 20,
+                  "end_col_offset": 35,
+                  "end_lineno": 2,
+                  "lineno": 2,
+                  "node_id": 4,
+                  "src": "36:15:1"
+                }
+              ],
+              "ast_type": "arguments",
+              "col_offset": 20,
+              "default": null,
+              "defaults": [],
+              "end_col_offset": 35,
+              "end_lineno": 2,
+              "lineno": 2,
+              "node_id": 3,
+              "src": "36:15:1"
+            },
+            "ast_type": "FunctionDef",
+            "body": [
+              {
+                "ast_type": "Expr",
+                "col_offset": 38,
+                "end_col_offset": 48,
+                "end_lineno": 2,
+                "lineno": 2,
+                "node_id": 7,
+                "src": "54:10:1",
+                "value": {
+                  "ast_type": "Name",
+                  "col_offset": 38,
+                  "end_col_offset": 48,
+                  "end_lineno": 2,
+                  "id": "nonpayable",
+                  "lineno": 2,
+                  "node_id": 8,
+                  "src": "54:10:1"
+                }
+              }
+            ],
+            "col_offset": 4,
+            "decorator_list": [],
+            "doc_string": null,
+            "end_col_offset": 48,
+            "end_lineno": 2,
+            "lineno": 2,
+            "name": "requestRnds",
+            "node_id": 2,
+            "pos": null,
+            "returns": null,
+            "src": "20:44:1"
+          }
+        ],
+        "col_offset": 0,
+        "end_col_offset": 48,
+        "end_lineno": 2,
+        "lineno": 1,
+        "name": "MPR",
+        "node_id": 1,
+        "src": "0:64:1"
+      },
+      {
+        "annotation": {
+          "ast_type": "Subscript",
+          "col_offset": 8,
+          "end_col_offset": 49,
+          "end_lineno": 5,
+          "lineno": 5,
+          "node_id": 13,
+          "slice": {
+            "ast_type": "Index",
+            "col_offset": 8,
+            "end_col_offset": 49,
+            "end_lineno": 5,
+            "lineno": 5,
+            "node_id": 32,
+            "src": "78:41:1",
+            "value": {
+              "ast_type": "Tuple",
+              "col_offset": 16,
+              "elements": [
+                {
+                  "ast_type": "Name",
+                  "col_offset": 16,
+                  "end_col_offset": 23,
+                  "end_lineno": 5,
+                  "id": "address",
+                  "lineno": 5,
+                  "node_id": 17,
+                  "src": "86:7:1"
+                },
+                {
+                  "ast_type": "Subscript",
+                  "col_offset": 25,
+                  "end_col_offset": 48,
+                  "end_lineno": 5,
+                  "lineno": 5,
+                  "node_id": 19,
+                  "slice": {
+                    "ast_type": "Index",
+                    "col_offset": 25,
+                    "end_col_offset": 48,
+                    "end_lineno": 5,
+                    "lineno": 5,
+                    "node_id": 29,
+                    "src": "95:23:1",
+                    "value": {
+                      "ast_type": "Tuple",
+                      "col_offset": 33,
+                      "elements": [
+                        {
+                          "ast_type": "Name",
+                          "col_offset": 33,
+                          "end_col_offset": 38,
+                          "end_lineno": 5,
+                          "id": "uint8",
+                          "lineno": 5,
+                          "node_id": 23,
+                          "src": "103:5:1"
+                        },
+                        {
+                          "ast_type": "Name",
+                          "col_offset": 40,
+                          "end_col_offset": 47,
+                          "end_lineno": 5,
+                          "id": "uint256",
+                          "lineno": 5,
+                          "node_id": 25,
+                          "src": "110:7:1"
+                        }
+                      ],
+                      "end_col_offset": 47,
+                      "end_lineno": 5,
+                      "lineno": 5,
+                      "node_id": 22,
+                      "src": "103:14:1"
+                    }
+                  },
+                  "src": "95:23:1",
+                  "value": {
+                    "ast_type": "Name",
+                    "col_offset": 25,
+                    "end_col_offset": 32,
+                    "end_lineno": 5,
+                    "id": "HashMap",
+                    "lineno": 5,
+                    "node_id": 20,
+                    "src": "95:7:1"
+                  }
+                }
+              ],
+              "end_col_offset": 48,
+              "end_lineno": 5,
+              "lineno": 5,
+              "node_id": 16,
+              "src": "86:32:1"
+            }
+          },
+          "src": "78:41:1",
+          "value": {
+            "ast_type": "Name",
+            "col_offset": 8,
+            "end_col_offset": 15,
+            "end_lineno": 5,
+            "id": "HashMap",
+            "lineno": 5,
+            "node_id": 14,
+            "src": "78:7:1"
+          }
+        },
+        "ast_type": "AnnAssign",
+        "col_offset": 0,
+        "end_col_offset": 49,
+        "end_lineno": 5,
+        "lineno": 5,
+        "node_id": 10,
+        "simple": 1,
+        "src": "70:49:1",
+        "target": {
+          "ast_type": "Name",
+          "col_offset": 0,
+          "end_col_offset": 6,
+          "end_lineno": 5,
+          "id": "pixels",
+          "lineno": 5,
+          "node_id": 11,
+          "src": "70:6:1"
+        },
+        "value": null
+      },
+      {
+        "annotation": {
+          "ast_type": "Name",
+          "col_offset": 5,
+          "end_col_offset": 8,
+          "end_lineno": 7,
+          "id": "MPR",
+          "lineno": 7,
+          "node_id": 36,
+          "src": "128:3:1"
+        },
+        "ast_type": "AnnAssign",
+        "col_offset": 0,
+        "end_col_offset": 8,
+        "end_lineno": 7,
+        "lineno": 7,
+        "node_id": 33,
+        "simple": 1,
+        "src": "123:8:1",
+        "target": {
+          "ast_type": "Name",
+          "col_offset": 0,
+          "end_col_offset": 3,
+          "end_lineno": 7,
+          "id": "mpr",
+          "lineno": 7,
+          "node_id": 34,
+          "src": "123:3:1"
+        },
+        "value": null
+      },
+      {
+        "args": {
+          "args": [],
+          "ast_type": "arguments",
+          "col_offset": 0,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 3,
+          "end_lineno": 11,
+          "lineno": 11,
+          "node_id": 39,
+          "src": "148:3:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "Pass",
+            "col_offset": 2,
+            "end_col_offset": 6,
+            "end_lineno": 12,
+            "lineno": 12,
+            "node_id": 40,
+            "src": "167:4:1"
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 10,
+            "id": "external",
+            "lineno": 10,
+            "node_id": 41,
+            "src": "138:8:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 6,
+        "end_lineno": 12,
+        "lineno": 11,
+        "name": "__init__",
+        "node_id": 38,
+        "pos": null,
+        "returns": null,
+        "src": "148:23:1"
+      },
+      {
+        "args": {
+          "args": [
+            {
+              "annotation": {
+                "ast_type": "Name",
+                "col_offset": 17,
+                "end_col_offset": 24,
+                "end_lineno": 16,
+                "id": "address",
+                "lineno": 16,
+                "node_id": 46,
+                "src": "216:7:1"
+              },
+              "arg": "_mpr",
+              "ast_type": "arg",
+              "col_offset": 11,
+              "end_col_offset": 24,
+              "end_lineno": 16,
+              "lineno": 16,
+              "node_id": 45,
+              "src": "210:13:1"
+            }
+          ],
+          "ast_type": "arguments",
+          "col_offset": 11,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 24,
+          "end_lineno": 16,
+          "lineno": 16,
+          "node_id": 44,
+          "src": "210:13:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "Assign",
+            "col_offset": 2,
+            "end_col_offset": 22,
+            "end_lineno": 17,
+            "lineno": 17,
+            "node_id": 48,
+            "src": "229:20:1",
+            "target": {
+              "ast_type": "Attribute",
+              "attr": "mpr",
+              "col_offset": 2,
+              "end_col_offset": 10,
+              "end_lineno": 17,
+              "lineno": 17,
+              "node_id": 49,
+              "src": "229:8:1",
+              "value": {
+                "ast_type": "Name",
+                "col_offset": 2,
+                "end_col_offset": 6,
+                "end_lineno": 17,
+                "id": "self",
+                "lineno": 17,
+                "node_id": 50,
+                "src": "229:4:1"
+              }
+            },
+            "value": {
+              "args": [
+                {
+                  "ast_type": "Name",
+                  "col_offset": 17,
+                  "end_col_offset": 21,
+                  "end_lineno": 17,
+                  "id": "_mpr",
+                  "lineno": 17,
+                  "node_id": 56,
+                  "src": "244:4:1"
+                }
+              ],
+              "ast_type": "Call",
+              "col_offset": 13,
+              "end_col_offset": 22,
+              "end_lineno": 17,
+              "func": {
+                "ast_type": "Name",
+                "col_offset": 13,
+                "end_col_offset": 16,
+                "end_lineno": 17,
+                "id": "MPR",
+                "lineno": 17,
+                "node_id": 54,
+                "src": "240:3:1"
+              },
+              "keyword": null,
+              "keywords": [],
+              "lineno": 17,
+              "node_id": 53,
+              "src": "240:9:1"
+            }
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 14,
+            "id": "external",
+            "lineno": 14,
+            "node_id": 58,
+            "src": "176:8:1"
+          },
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 11,
+            "end_lineno": 15,
+            "id": "nonpayable",
+            "lineno": 15,
+            "node_id": 60,
+            "src": "187:10:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 22,
+        "end_lineno": 17,
+        "lineno": 16,
+        "name": "setMpr",
+        "node_id": 43,
+        "pos": null,
+        "returns": null,
+        "src": "199:50:1"
+      },
+      {
+        "args": {
+          "args": [],
+          "ast_type": "arguments",
+          "col_offset": 0,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 3,
+          "end_lineno": 21,
+          "lineno": 21,
+          "node_id": 63,
+          "src": "277:3:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "Expr",
+            "col_offset": 2,
+            "end_col_offset": 34,
+            "end_lineno": 22,
+            "lineno": 22,
+            "node_id": 64,
+            "src": "301:32:1",
+            "value": {
+              "args": [
+                {
+                  "ast_type": "Attribute",
+                  "attr": "sender",
+                  "col_offset": 23,
+                  "end_col_offset": 33,
+                  "end_lineno": 22,
+                  "lineno": 22,
+                  "node_id": 72,
+                  "src": "322:10:1",
+                  "value": {
+                    "ast_type": "Name",
+                    "col_offset": 23,
+                    "end_col_offset": 26,
+                    "end_lineno": 22,
+                    "id": "msg",
+                    "lineno": 22,
+                    "node_id": 73,
+                    "src": "322:3:1"
+                  }
+                }
+              ],
+              "ast_type": "Call",
+              "col_offset": 2,
+              "end_col_offset": 34,
+              "end_lineno": 22,
+              "func": {
+                "ast_type": "Attribute",
+                "attr": "requestRnds",
+                "col_offset": 2,
+                "end_col_offset": 22,
+                "end_lineno": 22,
+                "lineno": 22,
+                "node_id": 66,
+                "src": "301:20:1",
+                "value": {
+                  "ast_type": "Attribute",
+                  "attr": "mpr",
+                  "col_offset": 2,
+                  "end_col_offset": 10,
+                  "end_lineno": 22,
+                  "lineno": 22,
+                  "node_id": 67,
+                  "src": "301:8:1",
+                  "value": {
+                    "ast_type": "Name",
+                    "col_offset": 2,
+                    "end_col_offset": 6,
+                    "end_lineno": 22,
+                    "id": "self",
+                    "lineno": 22,
+                    "node_id": 68,
+                    "src": "301:4:1"
+                  }
+                }
+              },
+              "keyword": null,
+              "keywords": [],
+              "lineno": 22,
+              "node_id": 65,
+              "src": "301:32:1"
+            }
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 19,
+            "id": "external",
+            "lineno": 19,
+            "node_id": 76,
+            "src": "254:8:1"
+          },
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 11,
+            "end_lineno": 20,
+            "id": "nonpayable",
+            "lineno": 20,
+            "node_id": 78,
+            "src": "265:10:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 34,
+        "end_lineno": 22,
+        "lineno": 21,
+        "name": "conjurePixels",
+        "node_id": 62,
+        "pos": null,
+        "returns": null,
+        "src": "277:56:1"
+      },
+      {
+        "args": {
+          "args": [
+            {
+              "annotation": {
+                "ast_type": "Name",
+                "col_offset": 23,
+                "end_col_offset": 30,
+                "end_lineno": 25,
+                "id": "address",
+                "lineno": 25,
+                "node_id": 83,
+                "src": "372:7:1"
+              },
+              "arg": "sender",
+              "ast_type": "arg",
+              "col_offset": 15,
+              "end_col_offset": 30,
+              "end_lineno": 25,
+              "lineno": 25,
+              "node_id": 82,
+              "src": "364:15:1"
+            },
+            {
+              "annotation": {
+                "ast_type": "Subscript",
+                "col_offset": 38,
+                "end_col_offset": 49,
+                "end_lineno": 25,
+                "lineno": 25,
+                "node_id": 86,
+                "slice": {
+                  "ast_type": "Index",
+                  "col_offset": 38,
+                  "end_col_offset": 49,
+                  "end_lineno": 25,
+                  "lineno": 25,
+                  "node_id": 91,
+                  "src": "387:11:1",
+                  "value": {
+                    "ast_type": "Int",
+                    "col_offset": 46,
+                    "end_col_offset": 48,
+                    "end_lineno": 25,
+                    "lineno": 25,
+                    "node_id": 89,
+                    "src": "395:2:1",
+                    "value": 10
+                  }
+                },
+                "src": "387:11:1",
+                "value": {
+                  "ast_type": "Name",
+                  "col_offset": 38,
+                  "end_col_offset": 45,
+                  "end_lineno": 25,
+                  "id": "uint256",
+                  "lineno": 25,
+                  "node_id": 87,
+                  "src": "387:7:1"
+                }
+              },
+              "arg": "rnds",
+              "ast_type": "arg",
+              "col_offset": 32,
+              "end_col_offset": 49,
+              "end_lineno": 25,
+              "lineno": 25,
+              "node_id": 85,
+              "src": "381:17:1"
+            }
+          ],
+          "ast_type": "arguments",
+          "col_offset": 15,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 49,
+          "end_lineno": 25,
+          "lineno": 25,
+          "node_id": 81,
+          "src": "364:34:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "For",
+            "body": [
+              {
+                "annotation": {
+                  "ast_type": "Name",
+                  "col_offset": 11,
+                  "end_col_offset": 16,
+                  "end_lineno": 27,
+                  "id": "uint8",
+                  "lineno": 27,
+                  "node_id": 102,
+                  "src": "436:5:1"
+                },
+                "ast_type": "AnnAssign",
+                "col_offset": 4,
+                "end_col_offset": 42,
+                "end_lineno": 27,
+                "lineno": 27,
+                "node_id": 99,
+                "simple": 1,
+                "src": "429:38:1",
+                "target": {
+                  "ast_type": "Name",
+                  "col_offset": 4,
+                  "end_col_offset": 9,
+                  "end_lineno": 27,
+                  "id": "pxIdx",
+                  "lineno": 27,
+                  "node_id": 100,
+                  "src": "429:5:1"
+                },
+                "value": {
+                  "args": [
+                    {
+                      "ast_type": "Subscript",
+                      "col_offset": 27,
+                      "end_col_offset": 34,
+                      "end_lineno": 27,
+                      "lineno": 27,
+                      "node_id": 107,
+                      "slice": {
+                        "ast_type": "Index",
+                        "col_offset": 27,
+                        "end_col_offset": 34,
+                        "end_lineno": 27,
+                        "lineno": 27,
+                        "node_id": 113,
+                        "src": "452:7:1",
+                        "value": {
+                          "ast_type": "Name",
+                          "col_offset": 32,
+                          "end_col_offset": 33,
+                          "end_lineno": 27,
+                          "id": "i",
+                          "lineno": 27,
+                          "node_id": 110,
+                          "src": "457:1:1"
+                        }
+                      },
+                      "src": "452:7:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 27,
+                        "end_col_offset": 31,
+                        "end_lineno": 27,
+                        "id": "rnds",
+                        "lineno": 27,
+                        "node_id": 108,
+                        "src": "452:4:1"
+                      }
+                    },
+                    {
+                      "ast_type": "Name",
+                      "col_offset": 36,
+                      "end_col_offset": 41,
+                      "end_lineno": 27,
+                      "id": "uint8",
+                      "lineno": 27,
+                      "node_id": 114,
+                      "src": "461:5:1"
+                    }
+                  ],
+                  "ast_type": "Call",
+                  "col_offset": 19,
+                  "end_col_offset": 42,
+                  "end_lineno": 27,
+                  "func": {
+                    "ast_type": "Name",
+                    "col_offset": 19,
+                    "end_col_offset": 26,
+                    "end_lineno": 27,
+                    "id": "convert",
+                    "lineno": 27,
+                    "node_id": 105,
+                    "src": "444:7:1"
+                  },
+                  "keyword": null,
+                  "keywords": [],
+                  "lineno": 27,
+                  "node_id": 104,
+                  "src": "444:23:1"
+                }
+              },
+              {
+                "annotation": {
+                  "ast_type": "Name",
+                  "col_offset": 7,
+                  "end_col_offset": 14,
+                  "end_lineno": 28,
+                  "id": "uint256",
+                  "lineno": 28,
+                  "node_id": 119,
+                  "src": "476:7:1"
+                },
+                "ast_type": "AnnAssign",
+                "col_offset": 4,
+                "end_col_offset": 43,
+                "end_lineno": 28,
+                "lineno": 28,
+                "node_id": 116,
+                "simple": 1,
+                "src": "473:39:1",
+                "target": {
+                  "ast_type": "Name",
+                  "col_offset": 4,
+                  "end_col_offset": 5,
+                  "end_lineno": 28,
+                  "id": "v",
+                  "lineno": 28,
+                  "node_id": 117,
+                  "src": "473:1:1"
+                },
+                "value": {
+                  "ast_type": "Subscript",
+                  "col_offset": 17,
+                  "end_col_offset": 43,
+                  "end_lineno": 28,
+                  "lineno": 28,
+                  "node_id": 121,
+                  "slice": {
+                    "ast_type": "Index",
+                    "col_offset": 17,
+                    "end_col_offset": 43,
+                    "end_lineno": 28,
+                    "lineno": 28,
+                    "node_id": 134,
+                    "src": "486:26:1",
+                    "value": {
+                      "ast_type": "Name",
+                      "col_offset": 37,
+                      "end_col_offset": 42,
+                      "end_lineno": 28,
+                      "id": "pxIdx",
+                      "lineno": 28,
+                      "node_id": 131,
+                      "src": "506:5:1"
+                    }
+                  },
+                  "src": "486:26:1",
+                  "value": {
+                    "ast_type": "Subscript",
+                    "col_offset": 17,
+                    "end_col_offset": 36,
+                    "end_lineno": 28,
+                    "lineno": 28,
+                    "node_id": 122,
+                    "slice": {
+                      "ast_type": "Index",
+                      "col_offset": 17,
+                      "end_col_offset": 36,
+                      "end_lineno": 28,
+                      "lineno": 28,
+                      "node_id": 130,
+                      "src": "486:19:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 29,
+                        "end_col_offset": 35,
+                        "end_lineno": 28,
+                        "id": "sender",
+                        "lineno": 28,
+                        "node_id": 127,
+                        "src": "498:6:1"
+                      }
+                    },
+                    "src": "486:19:1",
+                    "value": {
+                      "ast_type": "Attribute",
+                      "attr": "pixels",
+                      "col_offset": 17,
+                      "end_col_offset": 28,
+                      "end_lineno": 28,
+                      "lineno": 28,
+                      "node_id": 123,
+                      "src": "486:11:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 17,
+                        "end_col_offset": 21,
+                        "end_lineno": 28,
+                        "id": "self",
+                        "lineno": 28,
+                        "node_id": 124,
+                        "src": "486:4:1"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "ast_type": "Assign",
+                "col_offset": 4,
+                "end_col_offset": 38,
+                "end_lineno": 29,
+                "lineno": 29,
+                "node_id": 135,
+                "src": "518:34:1",
+                "target": {
+                  "ast_type": "Subscript",
+                  "col_offset": 4,
+                  "end_col_offset": 30,
+                  "end_lineno": 29,
+                  "lineno": 29,
+                  "node_id": 136,
+                  "slice": {
+                    "ast_type": "Index",
+                    "col_offset": 4,
+                    "end_col_offset": 30,
+                    "end_lineno": 29,
+                    "lineno": 29,
+                    "node_id": 149,
+                    "src": "518:26:1",
+                    "value": {
+                      "ast_type": "Name",
+                      "col_offset": 24,
+                      "end_col_offset": 29,
+                      "end_lineno": 29,
+                      "id": "pxIdx",
+                      "lineno": 29,
+                      "node_id": 146,
+                      "src": "538:5:1"
+                    }
+                  },
+                  "src": "518:26:1",
+                  "value": {
+                    "ast_type": "Subscript",
+                    "col_offset": 4,
+                    "end_col_offset": 23,
+                    "end_lineno": 29,
+                    "lineno": 29,
+                    "node_id": 137,
+                    "slice": {
+                      "ast_type": "Index",
+                      "col_offset": 4,
+                      "end_col_offset": 23,
+                      "end_lineno": 29,
+                      "lineno": 29,
+                      "node_id": 145,
+                      "src": "518:19:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 16,
+                        "end_col_offset": 22,
+                        "end_lineno": 29,
+                        "id": "sender",
+                        "lineno": 29,
+                        "node_id": 142,
+                        "src": "530:6:1"
+                      }
+                    },
+                    "src": "518:19:1",
+                    "value": {
+                      "ast_type": "Attribute",
+                      "attr": "pixels",
+                      "col_offset": 4,
+                      "end_col_offset": 15,
+                      "end_lineno": 29,
+                      "lineno": 29,
+                      "node_id": 138,
+                      "src": "518:11:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 4,
+                        "end_col_offset": 8,
+                        "end_lineno": 29,
+                        "id": "self",
+                        "lineno": 29,
+                        "node_id": 139,
+                        "src": "518:4:1"
+                      }
+                    }
+                  }
+                },
+                "value": {
+                  "ast_type": "BinOp",
+                  "col_offset": 33,
+                  "end_col_offset": 38,
+                  "end_lineno": 29,
+                  "left": {
+                    "ast_type": "Name",
+                    "col_offset": 33,
+                    "end_col_offset": 34,
+                    "end_lineno": 29,
+                    "id": "v",
+                    "lineno": 29,
+                    "node_id": 151,
+                    "src": "547:1:1"
+                  },
+                  "lineno": 29,
+                  "node_id": 150,
+                  "op": {
+                    "ast_type": "Add",
+                    "col_offset": 33,
+                    "end_col_offset": 38,
+                    "end_lineno": 29,
+                    "lineno": 29,
+                    "node_id": 153,
+                    "src": "547:5:1"
+                  },
+                  "right": {
+                    "ast_type": "Int",
+                    "col_offset": 37,
+                    "end_col_offset": 38,
+                    "end_lineno": 29,
+                    "lineno": 29,
+                    "node_id": 154,
+                    "src": "551:1:1",
+                    "value": 1
+                  },
+                  "src": "547:5:1"
+                }
+              }
+            ],
+            "col_offset": 2,
+            "end_col_offset": 38,
+            "end_lineno": 29,
+            "iter": {
+              "args": [
+                {
+                  "ast_type": "Int",
+                  "col_offset": 17,
+                  "end_col_offset": 19,
+                  "end_lineno": 26,
+                  "lineno": 26,
+                  "node_id": 98,
+                  "src": "419:2:1",
+                  "value": 10
+                }
+              ],
+              "ast_type": "Call",
+              "col_offset": 11,
+              "end_col_offset": 20,
+              "end_lineno": 26,
+              "func": {
+                "ast_type": "Name",
+                "col_offset": 11,
+                "end_col_offset": 16,
+                "end_lineno": 26,
+                "id": "range",
+                "lineno": 26,
+                "node_id": 96,
+                "src": "413:5:1"
+              },
+              "keyword": null,
+              "keywords": [],
+              "lineno": 26,
+              "node_id": 95,
+              "src": "413:9:1"
+            },
+            "lineno": 26,
+            "node_id": 92,
+            "src": "404:148:1",
+            "target": {
+              "ast_type": "Name",
+              "col_offset": 6,
+              "end_col_offset": 7,
+              "end_lineno": 26,
+              "id": "i",
+              "lineno": 26,
+              "node_id": 93,
+              "src": "408:1:1"
+            }
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 24,
+            "id": "internal",
+            "lineno": 24,
+            "node_id": 155,
+            "src": "338:8:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 38,
+        "end_lineno": 29,
+        "lineno": 25,
+        "name": "mintPixels",
+        "node_id": 80,
+        "pos": null,
+        "returns": null,
+        "src": "349:203:1"
+      },
+      {
+        "args": {
+          "args": [
+            {
+              "annotation": {
+                "ast_type": "Name",
+                "col_offset": 24,
+                "end_col_offset": 31,
+                "end_lineno": 32,
+                "id": "address",
+                "lineno": 32,
+                "node_id": 160,
+                "src": "592:7:1"
+              },
+              "arg": "sender",
+              "ast_type": "arg",
+              "col_offset": 16,
+              "end_col_offset": 31,
+              "end_lineno": 32,
+              "lineno": 32,
+              "node_id": 159,
+              "src": "584:15:1"
+            },
+            {
+              "annotation": {
+                "ast_type": "Subscript",
+                "col_offset": 39,
+                "end_col_offset": 50,
+                "end_lineno": 32,
+                "lineno": 32,
+                "node_id": 163,
+                "slice": {
+                  "ast_type": "Index",
+                  "col_offset": 39,
+                  "end_col_offset": 50,
+                  "end_lineno": 32,
+                  "lineno": 32,
+                  "node_id": 168,
+                  "src": "607:11:1",
+                  "value": {
+                    "ast_type": "Int",
+                    "col_offset": 47,
+                    "end_col_offset": 49,
+                    "end_lineno": 32,
+                    "lineno": 32,
+                    "node_id": 166,
+                    "src": "615:2:1",
+                    "value": 10
+                  }
+                },
+                "src": "607:11:1",
+                "value": {
+                  "ast_type": "Name",
+                  "col_offset": 39,
+                  "end_col_offset": 46,
+                  "end_lineno": 32,
+                  "id": "uint256",
+                  "lineno": 32,
+                  "node_id": 164,
+                  "src": "607:7:1"
+                }
+              },
+              "arg": "rnds",
+              "ast_type": "arg",
+              "col_offset": 33,
+              "end_col_offset": 50,
+              "end_lineno": 32,
+              "lineno": 32,
+              "node_id": 162,
+              "src": "601:17:1"
+            }
+          ],
+          "ast_type": "arguments",
+          "col_offset": 16,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 50,
+          "end_lineno": 32,
+          "lineno": 32,
+          "node_id": 158,
+          "src": "584:34:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "Expr",
+            "col_offset": 2,
+            "end_col_offset": 31,
+            "end_lineno": 33,
+            "lineno": 33,
+            "node_id": 169,
+            "src": "624:29:1",
+            "value": {
+              "args": [
+                {
+                  "ast_type": "Name",
+                  "col_offset": 18,
+                  "end_col_offset": 24,
+                  "end_lineno": 33,
+                  "id": "sender",
+                  "lineno": 33,
+                  "node_id": 175,
+                  "src": "640:6:1"
+                },
+                {
+                  "ast_type": "Name",
+                  "col_offset": 26,
+                  "end_col_offset": 30,
+                  "end_lineno": 33,
+                  "id": "rnds",
+                  "lineno": 33,
+                  "node_id": 177,
+                  "src": "648:4:1"
+                }
+              ],
+              "ast_type": "Call",
+              "col_offset": 2,
+              "end_col_offset": 31,
+              "end_lineno": 33,
+              "func": {
+                "ast_type": "Attribute",
+                "attr": "mintPixels",
+                "col_offset": 2,
+                "end_col_offset": 17,
+                "end_lineno": 33,
+                "lineno": 33,
+                "node_id": 171,
+                "src": "624:15:1",
+                "value": {
+                  "ast_type": "Name",
+                  "col_offset": 2,
+                  "end_col_offset": 6,
+                  "end_lineno": 33,
+                  "id": "self",
+                  "lineno": 33,
+                  "node_id": 172,
+                  "src": "624:4:1"
+                }
+              },
+              "keyword": null,
+              "keywords": [],
+              "lineno": 33,
+              "node_id": 170,
+              "src": "624:29:1"
+            }
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 31,
+            "id": "external",
+            "lineno": 31,
+            "node_id": 179,
+            "src": "557:8:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 31,
+        "end_lineno": 33,
+        "lineno": 32,
+        "name": "resolveRnds",
+        "node_id": 157,
+        "pos": null,
+        "returns": null,
+        "src": "568:85:1"
+      }
+    ],
+    "col_offset": 0,
+    "doc_string": null,
+    "end_col_offset": 31,
+    "end_lineno": 33,
+    "lineno": 1,
+    "name": "MagicPixels.vy",
+    "node_id": 0,
+    "src": "0:653:1"
+  },
+  "legacyAST": {
+    "ast_type": "Module",
+    "body": [
+      {
+        "ast_type": "InterfaceDef",
+        "body": [
+          {
+            "args": {
+              "args": [
+                {
+                  "annotation": {
+                    "ast_type": "Name",
+                    "col_offset": 28,
+                    "end_col_offset": 35,
+                    "end_lineno": 2,
+                    "id": "address",
+                    "lineno": 2,
+                    "node_id": 5,
+                    "src": "44:7:1"
+                  },
+                  "arg": "sender",
+                  "ast_type": "arg",
+                  "col_offset": 20,
+                  "end_col_offset": 35,
+                  "end_lineno": 2,
+                  "lineno": 2,
+                  "node_id": 4,
+                  "src": "36:15:1"
+                }
+              ],
+              "ast_type": "arguments",
+              "col_offset": 20,
+              "default": null,
+              "defaults": [],
+              "end_col_offset": 35,
+              "end_lineno": 2,
+              "lineno": 2,
+              "node_id": 3,
+              "src": "36:15:1"
+            },
+            "ast_type": "FunctionDef",
+            "body": [
+              {
+                "ast_type": "Expr",
+                "col_offset": 38,
+                "end_col_offset": 48,
+                "end_lineno": 2,
+                "lineno": 2,
+                "node_id": 7,
+                "src": "54:10:1",
+                "value": {
+                  "ast_type": "Name",
+                  "col_offset": 38,
+                  "end_col_offset": 48,
+                  "end_lineno": 2,
+                  "id": "nonpayable",
+                  "lineno": 2,
+                  "node_id": 8,
+                  "src": "54:10:1"
+                }
+              }
+            ],
+            "col_offset": 4,
+            "decorator_list": [],
+            "doc_string": null,
+            "end_col_offset": 48,
+            "end_lineno": 2,
+            "lineno": 2,
+            "name": "requestRnds",
+            "node_id": 2,
+            "pos": null,
+            "returns": null,
+            "src": "20:44:1"
+          }
+        ],
+        "col_offset": 0,
+        "end_col_offset": 48,
+        "end_lineno": 2,
+        "lineno": 1,
+        "name": "MPR",
+        "node_id": 1,
+        "src": "0:64:1"
+      },
+      {
+        "annotation": {
+          "ast_type": "Subscript",
+          "col_offset": 8,
+          "end_col_offset": 49,
+          "end_lineno": 5,
+          "lineno": 5,
+          "node_id": 13,
+          "slice": {
+            "ast_type": "Index",
+            "col_offset": 8,
+            "end_col_offset": 49,
+            "end_lineno": 5,
+            "lineno": 5,
+            "node_id": 32,
+            "src": "78:41:1",
+            "value": {
+              "ast_type": "Tuple",
+              "col_offset": 16,
+              "elements": [
+                {
+                  "ast_type": "Name",
+                  "col_offset": 16,
+                  "end_col_offset": 23,
+                  "end_lineno": 5,
+                  "id": "address",
+                  "lineno": 5,
+                  "node_id": 17,
+                  "src": "86:7:1"
+                },
+                {
+                  "ast_type": "Subscript",
+                  "col_offset": 25,
+                  "end_col_offset": 48,
+                  "end_lineno": 5,
+                  "lineno": 5,
+                  "node_id": 19,
+                  "slice": {
+                    "ast_type": "Index",
+                    "col_offset": 25,
+                    "end_col_offset": 48,
+                    "end_lineno": 5,
+                    "lineno": 5,
+                    "node_id": 29,
+                    "src": "95:23:1",
+                    "value": {
+                      "ast_type": "Tuple",
+                      "col_offset": 33,
+                      "elements": [
+                        {
+                          "ast_type": "Name",
+                          "col_offset": 33,
+                          "end_col_offset": 38,
+                          "end_lineno": 5,
+                          "id": "uint8",
+                          "lineno": 5,
+                          "node_id": 23,
+                          "src": "103:5:1"
+                        },
+                        {
+                          "ast_type": "Name",
+                          "col_offset": 40,
+                          "end_col_offset": 47,
+                          "end_lineno": 5,
+                          "id": "uint256",
+                          "lineno": 5,
+                          "node_id": 25,
+                          "src": "110:7:1"
+                        }
+                      ],
+                      "end_col_offset": 47,
+                      "end_lineno": 5,
+                      "lineno": 5,
+                      "node_id": 22,
+                      "src": "103:14:1"
+                    }
+                  },
+                  "src": "95:23:1",
+                  "value": {
+                    "ast_type": "Name",
+                    "col_offset": 25,
+                    "end_col_offset": 32,
+                    "end_lineno": 5,
+                    "id": "HashMap",
+                    "lineno": 5,
+                    "node_id": 20,
+                    "src": "95:7:1"
+                  }
+                }
+              ],
+              "end_col_offset": 48,
+              "end_lineno": 5,
+              "lineno": 5,
+              "node_id": 16,
+              "src": "86:32:1"
+            }
+          },
+          "src": "78:41:1",
+          "value": {
+            "ast_type": "Name",
+            "col_offset": 8,
+            "end_col_offset": 15,
+            "end_lineno": 5,
+            "id": "HashMap",
+            "lineno": 5,
+            "node_id": 14,
+            "src": "78:7:1"
+          }
+        },
+        "ast_type": "AnnAssign",
+        "col_offset": 0,
+        "end_col_offset": 49,
+        "end_lineno": 5,
+        "lineno": 5,
+        "node_id": 10,
+        "simple": 1,
+        "src": "70:49:1",
+        "target": {
+          "ast_type": "Name",
+          "col_offset": 0,
+          "end_col_offset": 6,
+          "end_lineno": 5,
+          "id": "pixels",
+          "lineno": 5,
+          "node_id": 11,
+          "src": "70:6:1"
+        },
+        "value": null
+      },
+      {
+        "annotation": {
+          "ast_type": "Name",
+          "col_offset": 5,
+          "end_col_offset": 8,
+          "end_lineno": 7,
+          "id": "MPR",
+          "lineno": 7,
+          "node_id": 36,
+          "src": "128:3:1"
+        },
+        "ast_type": "AnnAssign",
+        "col_offset": 0,
+        "end_col_offset": 8,
+        "end_lineno": 7,
+        "lineno": 7,
+        "node_id": 33,
+        "simple": 1,
+        "src": "123:8:1",
+        "target": {
+          "ast_type": "Name",
+          "col_offset": 0,
+          "end_col_offset": 3,
+          "end_lineno": 7,
+          "id": "mpr",
+          "lineno": 7,
+          "node_id": 34,
+          "src": "123:3:1"
+        },
+        "value": null
+      },
+      {
+        "args": {
+          "args": [],
+          "ast_type": "arguments",
+          "col_offset": 0,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 3,
+          "end_lineno": 11,
+          "lineno": 11,
+          "node_id": 39,
+          "src": "148:3:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "Pass",
+            "col_offset": 2,
+            "end_col_offset": 6,
+            "end_lineno": 12,
+            "lineno": 12,
+            "node_id": 40,
+            "src": "167:4:1"
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 10,
+            "id": "external",
+            "lineno": 10,
+            "node_id": 41,
+            "src": "138:8:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 6,
+        "end_lineno": 12,
+        "lineno": 11,
+        "name": "__init__",
+        "node_id": 38,
+        "pos": null,
+        "returns": null,
+        "src": "148:23:1"
+      },
+      {
+        "args": {
+          "args": [
+            {
+              "annotation": {
+                "ast_type": "Name",
+                "col_offset": 17,
+                "end_col_offset": 24,
+                "end_lineno": 16,
+                "id": "address",
+                "lineno": 16,
+                "node_id": 46,
+                "src": "216:7:1"
+              },
+              "arg": "_mpr",
+              "ast_type": "arg",
+              "col_offset": 11,
+              "end_col_offset": 24,
+              "end_lineno": 16,
+              "lineno": 16,
+              "node_id": 45,
+              "src": "210:13:1"
+            }
+          ],
+          "ast_type": "arguments",
+          "col_offset": 11,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 24,
+          "end_lineno": 16,
+          "lineno": 16,
+          "node_id": 44,
+          "src": "210:13:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "Assign",
+            "col_offset": 2,
+            "end_col_offset": 22,
+            "end_lineno": 17,
+            "lineno": 17,
+            "node_id": 48,
+            "src": "229:20:1",
+            "target": {
+              "ast_type": "Attribute",
+              "attr": "mpr",
+              "col_offset": 2,
+              "end_col_offset": 10,
+              "end_lineno": 17,
+              "lineno": 17,
+              "node_id": 49,
+              "src": "229:8:1",
+              "value": {
+                "ast_type": "Name",
+                "col_offset": 2,
+                "end_col_offset": 6,
+                "end_lineno": 17,
+                "id": "self",
+                "lineno": 17,
+                "node_id": 50,
+                "src": "229:4:1"
+              }
+            },
+            "value": {
+              "args": [
+                {
+                  "ast_type": "Name",
+                  "col_offset": 17,
+                  "end_col_offset": 21,
+                  "end_lineno": 17,
+                  "id": "_mpr",
+                  "lineno": 17,
+                  "node_id": 56,
+                  "src": "244:4:1"
+                }
+              ],
+              "ast_type": "Call",
+              "col_offset": 13,
+              "end_col_offset": 22,
+              "end_lineno": 17,
+              "func": {
+                "ast_type": "Name",
+                "col_offset": 13,
+                "end_col_offset": 16,
+                "end_lineno": 17,
+                "id": "MPR",
+                "lineno": 17,
+                "node_id": 54,
+                "src": "240:3:1"
+              },
+              "keyword": null,
+              "keywords": [],
+              "lineno": 17,
+              "node_id": 53,
+              "src": "240:9:1"
+            }
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 14,
+            "id": "external",
+            "lineno": 14,
+            "node_id": 58,
+            "src": "176:8:1"
+          },
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 11,
+            "end_lineno": 15,
+            "id": "nonpayable",
+            "lineno": 15,
+            "node_id": 60,
+            "src": "187:10:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 22,
+        "end_lineno": 17,
+        "lineno": 16,
+        "name": "setMpr",
+        "node_id": 43,
+        "pos": null,
+        "returns": null,
+        "src": "199:50:1"
+      },
+      {
+        "args": {
+          "args": [],
+          "ast_type": "arguments",
+          "col_offset": 0,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 3,
+          "end_lineno": 21,
+          "lineno": 21,
+          "node_id": 63,
+          "src": "277:3:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "Expr",
+            "col_offset": 2,
+            "end_col_offset": 34,
+            "end_lineno": 22,
+            "lineno": 22,
+            "node_id": 64,
+            "src": "301:32:1",
+            "value": {
+              "args": [
+                {
+                  "ast_type": "Attribute",
+                  "attr": "sender",
+                  "col_offset": 23,
+                  "end_col_offset": 33,
+                  "end_lineno": 22,
+                  "lineno": 22,
+                  "node_id": 72,
+                  "src": "322:10:1",
+                  "value": {
+                    "ast_type": "Name",
+                    "col_offset": 23,
+                    "end_col_offset": 26,
+                    "end_lineno": 22,
+                    "id": "msg",
+                    "lineno": 22,
+                    "node_id": 73,
+                    "src": "322:3:1"
+                  }
+                }
+              ],
+              "ast_type": "Call",
+              "col_offset": 2,
+              "end_col_offset": 34,
+              "end_lineno": 22,
+              "func": {
+                "ast_type": "Attribute",
+                "attr": "requestRnds",
+                "col_offset": 2,
+                "end_col_offset": 22,
+                "end_lineno": 22,
+                "lineno": 22,
+                "node_id": 66,
+                "src": "301:20:1",
+                "value": {
+                  "ast_type": "Attribute",
+                  "attr": "mpr",
+                  "col_offset": 2,
+                  "end_col_offset": 10,
+                  "end_lineno": 22,
+                  "lineno": 22,
+                  "node_id": 67,
+                  "src": "301:8:1",
+                  "value": {
+                    "ast_type": "Name",
+                    "col_offset": 2,
+                    "end_col_offset": 6,
+                    "end_lineno": 22,
+                    "id": "self",
+                    "lineno": 22,
+                    "node_id": 68,
+                    "src": "301:4:1"
+                  }
+                }
+              },
+              "keyword": null,
+              "keywords": [],
+              "lineno": 22,
+              "node_id": 65,
+              "src": "301:32:1"
+            }
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 19,
+            "id": "external",
+            "lineno": 19,
+            "node_id": 76,
+            "src": "254:8:1"
+          },
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 11,
+            "end_lineno": 20,
+            "id": "nonpayable",
+            "lineno": 20,
+            "node_id": 78,
+            "src": "265:10:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 34,
+        "end_lineno": 22,
+        "lineno": 21,
+        "name": "conjurePixels",
+        "node_id": 62,
+        "pos": null,
+        "returns": null,
+        "src": "277:56:1"
+      },
+      {
+        "args": {
+          "args": [
+            {
+              "annotation": {
+                "ast_type": "Name",
+                "col_offset": 23,
+                "end_col_offset": 30,
+                "end_lineno": 25,
+                "id": "address",
+                "lineno": 25,
+                "node_id": 83,
+                "src": "372:7:1"
+              },
+              "arg": "sender",
+              "ast_type": "arg",
+              "col_offset": 15,
+              "end_col_offset": 30,
+              "end_lineno": 25,
+              "lineno": 25,
+              "node_id": 82,
+              "src": "364:15:1"
+            },
+            {
+              "annotation": {
+                "ast_type": "Subscript",
+                "col_offset": 38,
+                "end_col_offset": 49,
+                "end_lineno": 25,
+                "lineno": 25,
+                "node_id": 86,
+                "slice": {
+                  "ast_type": "Index",
+                  "col_offset": 38,
+                  "end_col_offset": 49,
+                  "end_lineno": 25,
+                  "lineno": 25,
+                  "node_id": 91,
+                  "src": "387:11:1",
+                  "value": {
+                    "ast_type": "Int",
+                    "col_offset": 46,
+                    "end_col_offset": 48,
+                    "end_lineno": 25,
+                    "lineno": 25,
+                    "node_id": 89,
+                    "src": "395:2:1",
+                    "value": 10
+                  }
+                },
+                "src": "387:11:1",
+                "value": {
+                  "ast_type": "Name",
+                  "col_offset": 38,
+                  "end_col_offset": 45,
+                  "end_lineno": 25,
+                  "id": "uint256",
+                  "lineno": 25,
+                  "node_id": 87,
+                  "src": "387:7:1"
+                }
+              },
+              "arg": "rnds",
+              "ast_type": "arg",
+              "col_offset": 32,
+              "end_col_offset": 49,
+              "end_lineno": 25,
+              "lineno": 25,
+              "node_id": 85,
+              "src": "381:17:1"
+            }
+          ],
+          "ast_type": "arguments",
+          "col_offset": 15,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 49,
+          "end_lineno": 25,
+          "lineno": 25,
+          "node_id": 81,
+          "src": "364:34:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "For",
+            "body": [
+              {
+                "annotation": {
+                  "ast_type": "Name",
+                  "col_offset": 11,
+                  "end_col_offset": 16,
+                  "end_lineno": 27,
+                  "id": "uint8",
+                  "lineno": 27,
+                  "node_id": 102,
+                  "src": "436:5:1"
+                },
+                "ast_type": "AnnAssign",
+                "col_offset": 4,
+                "end_col_offset": 42,
+                "end_lineno": 27,
+                "lineno": 27,
+                "node_id": 99,
+                "simple": 1,
+                "src": "429:38:1",
+                "target": {
+                  "ast_type": "Name",
+                  "col_offset": 4,
+                  "end_col_offset": 9,
+                  "end_lineno": 27,
+                  "id": "pxIdx",
+                  "lineno": 27,
+                  "node_id": 100,
+                  "src": "429:5:1"
+                },
+                "value": {
+                  "args": [
+                    {
+                      "ast_type": "Subscript",
+                      "col_offset": 27,
+                      "end_col_offset": 34,
+                      "end_lineno": 27,
+                      "lineno": 27,
+                      "node_id": 107,
+                      "slice": {
+                        "ast_type": "Index",
+                        "col_offset": 27,
+                        "end_col_offset": 34,
+                        "end_lineno": 27,
+                        "lineno": 27,
+                        "node_id": 113,
+                        "src": "452:7:1",
+                        "value": {
+                          "ast_type": "Name",
+                          "col_offset": 32,
+                          "end_col_offset": 33,
+                          "end_lineno": 27,
+                          "id": "i",
+                          "lineno": 27,
+                          "node_id": 110,
+                          "src": "457:1:1"
+                        }
+                      },
+                      "src": "452:7:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 27,
+                        "end_col_offset": 31,
+                        "end_lineno": 27,
+                        "id": "rnds",
+                        "lineno": 27,
+                        "node_id": 108,
+                        "src": "452:4:1"
+                      }
+                    },
+                    {
+                      "ast_type": "Name",
+                      "col_offset": 36,
+                      "end_col_offset": 41,
+                      "end_lineno": 27,
+                      "id": "uint8",
+                      "lineno": 27,
+                      "node_id": 114,
+                      "src": "461:5:1"
+                    }
+                  ],
+                  "ast_type": "Call",
+                  "col_offset": 19,
+                  "end_col_offset": 42,
+                  "end_lineno": 27,
+                  "func": {
+                    "ast_type": "Name",
+                    "col_offset": 19,
+                    "end_col_offset": 26,
+                    "end_lineno": 27,
+                    "id": "convert",
+                    "lineno": 27,
+                    "node_id": 105,
+                    "src": "444:7:1"
+                  },
+                  "keyword": null,
+                  "keywords": [],
+                  "lineno": 27,
+                  "node_id": 104,
+                  "src": "444:23:1"
+                }
+              },
+              {
+                "annotation": {
+                  "ast_type": "Name",
+                  "col_offset": 7,
+                  "end_col_offset": 14,
+                  "end_lineno": 28,
+                  "id": "uint256",
+                  "lineno": 28,
+                  "node_id": 119,
+                  "src": "476:7:1"
+                },
+                "ast_type": "AnnAssign",
+                "col_offset": 4,
+                "end_col_offset": 43,
+                "end_lineno": 28,
+                "lineno": 28,
+                "node_id": 116,
+                "simple": 1,
+                "src": "473:39:1",
+                "target": {
+                  "ast_type": "Name",
+                  "col_offset": 4,
+                  "end_col_offset": 5,
+                  "end_lineno": 28,
+                  "id": "v",
+                  "lineno": 28,
+                  "node_id": 117,
+                  "src": "473:1:1"
+                },
+                "value": {
+                  "ast_type": "Subscript",
+                  "col_offset": 17,
+                  "end_col_offset": 43,
+                  "end_lineno": 28,
+                  "lineno": 28,
+                  "node_id": 121,
+                  "slice": {
+                    "ast_type": "Index",
+                    "col_offset": 17,
+                    "end_col_offset": 43,
+                    "end_lineno": 28,
+                    "lineno": 28,
+                    "node_id": 134,
+                    "src": "486:26:1",
+                    "value": {
+                      "ast_type": "Name",
+                      "col_offset": 37,
+                      "end_col_offset": 42,
+                      "end_lineno": 28,
+                      "id": "pxIdx",
+                      "lineno": 28,
+                      "node_id": 131,
+                      "src": "506:5:1"
+                    }
+                  },
+                  "src": "486:26:1",
+                  "value": {
+                    "ast_type": "Subscript",
+                    "col_offset": 17,
+                    "end_col_offset": 36,
+                    "end_lineno": 28,
+                    "lineno": 28,
+                    "node_id": 122,
+                    "slice": {
+                      "ast_type": "Index",
+                      "col_offset": 17,
+                      "end_col_offset": 36,
+                      "end_lineno": 28,
+                      "lineno": 28,
+                      "node_id": 130,
+                      "src": "486:19:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 29,
+                        "end_col_offset": 35,
+                        "end_lineno": 28,
+                        "id": "sender",
+                        "lineno": 28,
+                        "node_id": 127,
+                        "src": "498:6:1"
+                      }
+                    },
+                    "src": "486:19:1",
+                    "value": {
+                      "ast_type": "Attribute",
+                      "attr": "pixels",
+                      "col_offset": 17,
+                      "end_col_offset": 28,
+                      "end_lineno": 28,
+                      "lineno": 28,
+                      "node_id": 123,
+                      "src": "486:11:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 17,
+                        "end_col_offset": 21,
+                        "end_lineno": 28,
+                        "id": "self",
+                        "lineno": 28,
+                        "node_id": 124,
+                        "src": "486:4:1"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "ast_type": "Assign",
+                "col_offset": 4,
+                "end_col_offset": 38,
+                "end_lineno": 29,
+                "lineno": 29,
+                "node_id": 135,
+                "src": "518:34:1",
+                "target": {
+                  "ast_type": "Subscript",
+                  "col_offset": 4,
+                  "end_col_offset": 30,
+                  "end_lineno": 29,
+                  "lineno": 29,
+                  "node_id": 136,
+                  "slice": {
+                    "ast_type": "Index",
+                    "col_offset": 4,
+                    "end_col_offset": 30,
+                    "end_lineno": 29,
+                    "lineno": 29,
+                    "node_id": 149,
+                    "src": "518:26:1",
+                    "value": {
+                      "ast_type": "Name",
+                      "col_offset": 24,
+                      "end_col_offset": 29,
+                      "end_lineno": 29,
+                      "id": "pxIdx",
+                      "lineno": 29,
+                      "node_id": 146,
+                      "src": "538:5:1"
+                    }
+                  },
+                  "src": "518:26:1",
+                  "value": {
+                    "ast_type": "Subscript",
+                    "col_offset": 4,
+                    "end_col_offset": 23,
+                    "end_lineno": 29,
+                    "lineno": 29,
+                    "node_id": 137,
+                    "slice": {
+                      "ast_type": "Index",
+                      "col_offset": 4,
+                      "end_col_offset": 23,
+                      "end_lineno": 29,
+                      "lineno": 29,
+                      "node_id": 145,
+                      "src": "518:19:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 16,
+                        "end_col_offset": 22,
+                        "end_lineno": 29,
+                        "id": "sender",
+                        "lineno": 29,
+                        "node_id": 142,
+                        "src": "530:6:1"
+                      }
+                    },
+                    "src": "518:19:1",
+                    "value": {
+                      "ast_type": "Attribute",
+                      "attr": "pixels",
+                      "col_offset": 4,
+                      "end_col_offset": 15,
+                      "end_lineno": 29,
+                      "lineno": 29,
+                      "node_id": 138,
+                      "src": "518:11:1",
+                      "value": {
+                        "ast_type": "Name",
+                        "col_offset": 4,
+                        "end_col_offset": 8,
+                        "end_lineno": 29,
+                        "id": "self",
+                        "lineno": 29,
+                        "node_id": 139,
+                        "src": "518:4:1"
+                      }
+                    }
+                  }
+                },
+                "value": {
+                  "ast_type": "BinOp",
+                  "col_offset": 33,
+                  "end_col_offset": 38,
+                  "end_lineno": 29,
+                  "left": {
+                    "ast_type": "Name",
+                    "col_offset": 33,
+                    "end_col_offset": 34,
+                    "end_lineno": 29,
+                    "id": "v",
+                    "lineno": 29,
+                    "node_id": 151,
+                    "src": "547:1:1"
+                  },
+                  "lineno": 29,
+                  "node_id": 150,
+                  "op": {
+                    "ast_type": "Add",
+                    "col_offset": 33,
+                    "end_col_offset": 38,
+                    "end_lineno": 29,
+                    "lineno": 29,
+                    "node_id": 153,
+                    "src": "547:5:1"
+                  },
+                  "right": {
+                    "ast_type": "Int",
+                    "col_offset": 37,
+                    "end_col_offset": 38,
+                    "end_lineno": 29,
+                    "lineno": 29,
+                    "node_id": 154,
+                    "src": "551:1:1",
+                    "value": 1
+                  },
+                  "src": "547:5:1"
+                }
+              }
+            ],
+            "col_offset": 2,
+            "end_col_offset": 38,
+            "end_lineno": 29,
+            "iter": {
+              "args": [
+                {
+                  "ast_type": "Int",
+                  "col_offset": 17,
+                  "end_col_offset": 19,
+                  "end_lineno": 26,
+                  "lineno": 26,
+                  "node_id": 98,
+                  "src": "419:2:1",
+                  "value": 10
+                }
+              ],
+              "ast_type": "Call",
+              "col_offset": 11,
+              "end_col_offset": 20,
+              "end_lineno": 26,
+              "func": {
+                "ast_type": "Name",
+                "col_offset": 11,
+                "end_col_offset": 16,
+                "end_lineno": 26,
+                "id": "range",
+                "lineno": 26,
+                "node_id": 96,
+                "src": "413:5:1"
+              },
+              "keyword": null,
+              "keywords": [],
+              "lineno": 26,
+              "node_id": 95,
+              "src": "413:9:1"
+            },
+            "lineno": 26,
+            "node_id": 92,
+            "src": "404:148:1",
+            "target": {
+              "ast_type": "Name",
+              "col_offset": 6,
+              "end_col_offset": 7,
+              "end_lineno": 26,
+              "id": "i",
+              "lineno": 26,
+              "node_id": 93,
+              "src": "408:1:1"
+            }
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 24,
+            "id": "internal",
+            "lineno": 24,
+            "node_id": 155,
+            "src": "338:8:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 38,
+        "end_lineno": 29,
+        "lineno": 25,
+        "name": "mintPixels",
+        "node_id": 80,
+        "pos": null,
+        "returns": null,
+        "src": "349:203:1"
+      },
+      {
+        "args": {
+          "args": [
+            {
+              "annotation": {
+                "ast_type": "Name",
+                "col_offset": 24,
+                "end_col_offset": 31,
+                "end_lineno": 32,
+                "id": "address",
+                "lineno": 32,
+                "node_id": 160,
+                "src": "592:7:1"
+              },
+              "arg": "sender",
+              "ast_type": "arg",
+              "col_offset": 16,
+              "end_col_offset": 31,
+              "end_lineno": 32,
+              "lineno": 32,
+              "node_id": 159,
+              "src": "584:15:1"
+            },
+            {
+              "annotation": {
+                "ast_type": "Subscript",
+                "col_offset": 39,
+                "end_col_offset": 50,
+                "end_lineno": 32,
+                "lineno": 32,
+                "node_id": 163,
+                "slice": {
+                  "ast_type": "Index",
+                  "col_offset": 39,
+                  "end_col_offset": 50,
+                  "end_lineno": 32,
+                  "lineno": 32,
+                  "node_id": 168,
+                  "src": "607:11:1",
+                  "value": {
+                    "ast_type": "Int",
+                    "col_offset": 47,
+                    "end_col_offset": 49,
+                    "end_lineno": 32,
+                    "lineno": 32,
+                    "node_id": 166,
+                    "src": "615:2:1",
+                    "value": 10
+                  }
+                },
+                "src": "607:11:1",
+                "value": {
+                  "ast_type": "Name",
+                  "col_offset": 39,
+                  "end_col_offset": 46,
+                  "end_lineno": 32,
+                  "id": "uint256",
+                  "lineno": 32,
+                  "node_id": 164,
+                  "src": "607:7:1"
+                }
+              },
+              "arg": "rnds",
+              "ast_type": "arg",
+              "col_offset": 33,
+              "end_col_offset": 50,
+              "end_lineno": 32,
+              "lineno": 32,
+              "node_id": 162,
+              "src": "601:17:1"
+            }
+          ],
+          "ast_type": "arguments",
+          "col_offset": 16,
+          "default": null,
+          "defaults": [],
+          "end_col_offset": 50,
+          "end_lineno": 32,
+          "lineno": 32,
+          "node_id": 158,
+          "src": "584:34:1"
+        },
+        "ast_type": "FunctionDef",
+        "body": [
+          {
+            "ast_type": "Expr",
+            "col_offset": 2,
+            "end_col_offset": 31,
+            "end_lineno": 33,
+            "lineno": 33,
+            "node_id": 169,
+            "src": "624:29:1",
+            "value": {
+              "args": [
+                {
+                  "ast_type": "Name",
+                  "col_offset": 18,
+                  "end_col_offset": 24,
+                  "end_lineno": 33,
+                  "id": "sender",
+                  "lineno": 33,
+                  "node_id": 175,
+                  "src": "640:6:1"
+                },
+                {
+                  "ast_type": "Name",
+                  "col_offset": 26,
+                  "end_col_offset": 30,
+                  "end_lineno": 33,
+                  "id": "rnds",
+                  "lineno": 33,
+                  "node_id": 177,
+                  "src": "648:4:1"
+                }
+              ],
+              "ast_type": "Call",
+              "col_offset": 2,
+              "end_col_offset": 31,
+              "end_lineno": 33,
+              "func": {
+                "ast_type": "Attribute",
+                "attr": "mintPixels",
+                "col_offset": 2,
+                "end_col_offset": 17,
+                "end_lineno": 33,
+                "lineno": 33,
+                "node_id": 171,
+                "src": "624:15:1",
+                "value": {
+                  "ast_type": "Name",
+                  "col_offset": 2,
+                  "end_col_offset": 6,
+                  "end_lineno": 33,
+                  "id": "self",
+                  "lineno": 33,
+                  "node_id": 172,
+                  "src": "624:4:1"
+                }
+              },
+              "keyword": null,
+              "keywords": [],
+              "lineno": 33,
+              "node_id": 170,
+              "src": "624:29:1"
+            }
+          }
+        ],
+        "col_offset": 0,
+        "decorator_list": [
+          {
+            "ast_type": "Name",
+            "col_offset": 1,
+            "end_col_offset": 9,
+            "end_lineno": 31,
+            "id": "external",
+            "lineno": 31,
+            "node_id": 179,
+            "src": "557:8:1"
+          }
+        ],
+        "doc_string": null,
+        "end_col_offset": 31,
+        "end_lineno": 33,
+        "lineno": 32,
+        "name": "resolveRnds",
+        "node_id": 157,
+        "pos": null,
+        "returns": null,
+        "src": "568:85:1"
+      }
+    ],
+    "col_offset": 0,
+    "doc_string": null,
+    "end_col_offset": 31,
+    "end_lineno": 33,
+    "lineno": 1,
+    "name": "MagicPixels.vy",
+    "node_id": 0,
+    "src": "0:653:1"
+  },
+  "compiler": {
+    "name": "vyper",
+    "version": "0.3.1"
+  },
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0x90C445eB2CBe5178839C2369d65A24e898af0382",
+      "transactionHash": "0x36a17af2b4e7f09ae754b0f0ccede9db908742db833e12c2bd7a0dc7b77a2bde"
+    }
+  },
+  "schemaVersion": "3.4.4",
+  "updatedAt": "2022-02-06T15:02:42.827Z",
+  "devdoc": {},
+  "userdoc": {}
+}

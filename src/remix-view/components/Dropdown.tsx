@@ -12,7 +12,7 @@ export default function Input(props: {
     (open ? 'border-vscode-focusBorder' : 'border-vscode-dropdown-border')
   } onClick={() => setOpen(!open)}>
     { props.selected ?
-      <span className='flex-grow overflow-hidden text-ellipsis'>{props.selected}</span>
+      <span className='flex-grow overflow-hidden text-ellipsis whitespace-nowrap'>{props.selected}</span>
       :
       <span className='flex-grow text-vscode-input-placeholderForeground'>Select item</span>
     }
@@ -24,7 +24,7 @@ export default function Input(props: {
           <div key={item}
             onClick={() => item !== props.selected && props.onSelected(item)}
             className={`border border-transparent hover:bg-vscode-editor-background
-                       hover:border-vscode-focusBorder px-1 text-ellipsis overflow-hidden ` +
+                       hover:border-vscode-focusBorder px-1 text-ellipsis overflow-hidden whitespace-nowrap ` +
                        (item === props.selected ? 'bg-vscode-editor-background' : '')}>
             {item}
           </div>

@@ -1,71 +1,63 @@
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import * as vscode from 'vscode';
-import type { Resources, ResourceSetObservable } from './Resources';
 
 export default class ContractFileWatcher {
-  public files: vscode.Uri[] = [];
-
+  private contractSavedSub;
   public $contractSaved;
 
-  public $filesLoaded;
+  private contractOpenedSub;
+  public $contractOpened;
 
-  public get openedContract() {
-    return this.pathToUri(this.resources.openedContract as string);
+  private filesSub;
+  public $files;
+
+  constructor(private config: vscode.WorkspaceConfiguration, private context: vscode.ExtensionContext) {
+    this.filesSub = new BehaviorSubject<Record<string, vscode.Uri>>({});
+    this.$files = this.filesSub.asObservable();
+
+    this.contractOpenedSub = new Subject<vscode.Uri>();
+    this.$contractOpened = this.contractOpenedSub.asObservable();
+
+    this.contractSavedSub = new Subject<vscode.Uri>();
+    this.$contractSaved = this.contractSavedSub.asObservable();
   }
 
-  constructor(private resources: Resources, config: vscode.WorkspaceConfiguration) {
-    const filesLoadedSub = new Subject();
-    this.$filesLoaded = filesLoadedSub.asObservable();
-
-    // TODO: more performant use deltas
-    const updateSolFiles = async () => {
-      const glob = config.get<string>('contractGlobPattern') ?? '**/*.sol';
-      this.files = (await vscode.workspace.findFiles(glob));
-      resources.contracts = this.files.map(uri => uri.path);
-      filesLoadedSub.next(null);
-    };
-    vscode.workspace.onDidDeleteFiles(updateSolFiles);
-    vscode.workspace.onDidCreateFiles(updateSolFiles);
-    vscode.workspace.onDidRenameFiles(updateSolFiles);
-    updateSolFiles();
+  public async watch() {
+    const glob = this.config.get<string>('contractGlobPattern');
+    if (!glob) return;
 
     const setOpenedContract = (e: vscode.TextEditor | undefined) => {
       if (e?.document.uri.fsPath.endsWith('.sol')) {
-        resources.openedContract = e.document.uri.path;
+        this.contractOpenedSub.next(e.document.uri);
       }
     };
     vscode.window.onDidChangeActiveTextEditor(setOpenedContract);
     setOpenedContract(vscode.window.activeTextEditor);
 
-    const onContractSavedSub = new Subject<vscode.Uri>();
-    this.$contractSaved = onContractSavedSub.asObservable();
-
-    vscode.workspace.onDidSaveTextDocument(e => {
-      if (e.uri.fsPath.endsWith('.sol') && resources.autoCompile) {
-        onContractSavedSub.next(e.uri);
-      }
-    });
-  }
-
-  subscribeResources($resourceSet: ResourceSetObservable) {
-    $resourceSet.subscribe(msg => {
-      switch (msg.resource) {
-      case 'openedContract':
-        this.setOpenedContract(msg.data as string);
-        break;
-      }
-    });
-  }
-
-  private async setOpenedContract(contract: string) {
-    const file = this.files.find(f => f.path.includes(contract));
-    if (file) {
-      await vscode.window.showTextDocument(await vscode.workspace.openTextDocument(file));
+    const files = (await vscode.workspace.findFiles(glob));
+    const filesMap = {...this.filesSub.value};
+    for (const file of files) {
+      filesMap[file.path] = file;
     }
-  }
+    this.filesSub.next(filesMap);
 
-  private pathToUri(path: string) {
-    return this.files.find(f => f.path.includes(path));
-  }
+    const fsw = vscode.workspace.createFileSystemWatcher(glob);
+    this.context.subscriptions.push(fsw);
 
+    fsw.onDidCreate(file => {
+      const filesMap = {...this.filesSub.value};
+      filesMap[file.path] = file;
+      this.filesSub.next(filesMap);
+      this.contractSavedSub.next(file);
+    });
+    fsw.onDidDelete(file => {
+      const filesMap = {...this.filesSub.value};
+      delete filesMap[file.path];
+      this.filesSub.next(filesMap);
+    });
+
+    fsw.onDidChange(file => {
+      this.contractSavedSub.next(file);
+    });
+  }
 }

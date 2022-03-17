@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import ArtifactFileWatcher from './modules/ArtifactFileWatcher';
 import { Chain } from './modules/Chain';
 
 import Compiler from './modules/Compiler';
@@ -9,7 +10,7 @@ import createResources from './modules/Resources';
 
 declare let DEBUG: boolean;
 
-(() => {
+function clearArrayPrototype() {
   // This looks awful and it is, but hear me out...
   // You should never touch prototype properties but unfortunately, some libaries do.
   // One example of such a library is mscorelib.
@@ -24,9 +25,11 @@ declare let DEBUG: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (Array.prototype as any)[k];
   }
-})();
+}
 
 export function activate(context: vscode.ExtensionContext) {
+  clearArrayPrototype(); // 🙄
+
   const out = vscode.window.createOutputChannel('Remix-Light');
 
   // TODO: use environments
@@ -45,13 +48,16 @@ export function activate(context: vscode.ExtensionContext) {
   const chain = new Chain(resources);
   chain.registerResources(subscribableResources);
 
-  const contractFileWatcher = new ContractFileWatcher(resources, config);
-  contractFileWatcher.subscribeResources($resourceSet);
-
-  const deployer = new ContractDeployer(chain, resources, contractFileWatcher, out);
+  const contractFileWatcher = new ContractFileWatcher(config, context);
+  const artifactFileWatcher = new ArtifactFileWatcher(config, context);
 
   const compiler = new Compiler(resources, contractFileWatcher, out);
   compiler.subscribeResources($resourceSet);
+
+  const deployer = new ContractDeployer(chain, resources, out, compiler, artifactFileWatcher);
+
+  contractFileWatcher.watch();
+  artifactFileWatcher.watch();
 
   const remixViewProvider = new ReactViewProvider(context.extensionUri, {
     log: (line: string) => {
