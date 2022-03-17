@@ -13,13 +13,14 @@ export default class ContractFileWatcher {
     return this.pathToUri(this.resources.openedContract as string);
   }
 
-  constructor(private resources: Resources) {
+  constructor(private resources: Resources, config: vscode.WorkspaceConfiguration) {
     const filesLoadedSub = new Subject();
     this.$filesLoaded = filesLoadedSub.asObservable();
 
     // TODO: more performant use deltas
     const updateSolFiles = async () => {
-      this.files = (await vscode.workspace.findFiles('**/*.sol'));
+      const glob = config.get<string>('contractGlobPattern') ?? '**/*.sol';
+      this.files = (await vscode.workspace.findFiles(glob));
       resources.contracts = this.files.map(uri => uri.path);
       filesLoadedSub.next(null);
     };

@@ -1,0 +1,3 @@
+{
+	"remix-light.contractGlobPattern": "test/**/*.sol"
+}
