@@ -39,7 +39,7 @@ export default React.memo(function TxHistory() {
           <div className='flex flex-col px-1 pb-2 pt-1 overflow-hidden'>
             <div className='flex'>
               <TxStat label='Status' value={tx.status ?? 'success'} success={(tx.status ?? 'success') === 'success'} />
-              <TxStat label='Gas' value={tx.cost.toString()} />
+              <TxStat label='Gas cost' value={tx.cost >= 80000000 ? '-' : tx.cost.toString()} />
             </div>
 
             <TxStat label='From' value={tx.from} />
